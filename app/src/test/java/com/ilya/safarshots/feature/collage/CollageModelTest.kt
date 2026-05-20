@@ -9,11 +9,9 @@ import org.junit.Test
 class CollageModelTest {
     @Test
     fun includesExpectedMvpTemplates() {
+        assertTrue(CollageTemplate.entries.contains(CollageTemplate.PHOTO_WITH_MAP))
         assertTrue(CollageTemplate.entries.contains(CollageTemplate.POSTCARD))
-        assertTrue(CollageTemplate.entries.contains(CollageTemplate.MAP_STORY))
-        assertTrue(CollageTemplate.entries.contains(CollageTemplate.JOURNEY_TIMELINE))
-        assertTrue(CollageTemplate.entries.contains(CollageTemplate.PHOTO_GRID_WITH_MAP))
-        assertTrue(CollageTemplate.entries.contains(CollageTemplate.POLAROID_MAP))
+        assertEquals(2, CollageTemplate.entries.size)
     }
 
     @Test

@@ -15,6 +15,8 @@ import android.graphics.Shader
 import android.net.Uri
 import com.ilya.safarshots.core.common.DateTimeFormatters
 import com.ilya.safarshots.data.maps.StaticMapsClient
+import com.ilya.safarshots.domain.model.CollageBackgroundMode
+import com.ilya.safarshots.domain.model.CollageCard
 import com.ilya.safarshots.domain.model.CollageMapCorner
 import com.ilya.safarshots.domain.model.CollageOptions
 import com.ilya.safarshots.domain.model.CollageTemplate
@@ -42,10 +44,6 @@ class CollageRenderer @Inject constructor(
         when (options.template) {
             CollageTemplate.PHOTO_WITH_MAP -> drawPhotoWithMap(canvas, photos, options, palette, width, height)
             CollageTemplate.POSTCARD -> drawPostcard(canvas, photos, options, palette, width, height)
-            CollageTemplate.MAP_STORY -> drawMapStory(canvas, photos, options, palette, width, height)
-            CollageTemplate.JOURNEY_TIMELINE -> drawTimeline(canvas, photos, options, palette, width, height)
-            CollageTemplate.PHOTO_GRID_WITH_MAP -> drawGridWithMap(canvas, photos, options, palette, width, height)
-            CollageTemplate.POLAROID_MAP -> drawPolaroid(canvas, photos, options, palette, width, height)
         }
         bitmap
     }
@@ -58,54 +56,148 @@ class CollageRenderer @Inject constructor(
         width: Int,
         height: Int,
     ) {
-        val photo = photos.firstOrNull()
+        val photosById = photos.associateBy { it.id }
+        val heroPhoto = options.backgroundPhotoId?.let(photosById::get) ?: photos.firstOrNull()
         val hero = RectF(0f, 0f, width.toFloat(), height.toFloat())
-        drawPhoto(canvas, photo, hero, 0f, palette)
-
-        val captionText = buildList {
-            photo?.let {
-                add(collageTitle(it))
-                if (options.showDate) add(DateTimeFormatters.photoDateTime(it.capturedAtMillis))
-                if (options.showCoordinates && it.location != null) {
-                    add(DateTimeFormatters.coordinates(it.location.latitude, it.location.longitude))
-                }
-            }
+        when (options.backgroundMode) {
+            CollageBackgroundMode.HERO_PHOTO -> drawPhoto(canvas, heroPhoto, hero, 0f, palette)
+            CollageBackgroundMode.SOLID_COLOR -> drawSolidBackground(canvas, hero, options.backgroundColor)
         }
-        val mapInset = width * 0.04f
-        val mapSize = min(width, height) * PHOTO_WITH_MAP_SIZE_FRACTION
+
+        val captionPhoto = heroPhoto ?: photos.firstOrNull()
+        val captionText = buildCaptionLines(captionPhoto, options.showDate, options.showCoordinates)
+        val defaultMapInset = width * 0.04f
+        val defaultMapSize = min(width, height) * PHOTO_WITH_MAP_SIZE_FRACTION
         val mapSharesBottomWithCaption = options.showMiniMap &&
-            photo?.location != null &&
+            captionPhoto?.location != null &&
+            options.mapPlacement == null &&
+            options.captionPlacement == null &&
             options.mapCorner == CollageMapCorner.BOTTOM_RIGHT
         if (captionText.isNotEmpty()) {
-            val captionInset = width * 0.04f
-            val maxCaptionWidth = if (mapSharesBottomWithCaption) {
-                (width - mapSize - mapInset - captionInset * 2f)
-                    .coerceIn(width * 0.36f, width * 0.6f)
+            val captionInsetPad = width * 0.04f
+            val placement = options.captionPlacement
+            val widthFrac = placement?.widthFrac ?: if (mapSharesBottomWithCaption) {
+                ((width - defaultMapSize - defaultMapInset - captionInsetPad * 2f) / width)
+                    .coerceIn(0.36f, 0.6f)
             } else {
-                width * 0.6f
+                0.6f
             }
+            val captionWidth = widthFrac * width
             val titleSize = (width * 0.036f).coerceIn(28f, 56f)
             val subSize = titleSize * 0.55f
-            val captionHeight = titleSize + 12f + subSize * (captionText.size - 1) + (captionText.size - 1).coerceAtLeast(0) * 8f + captionInset * 2f
+            val captionHeight = titleSize + 12f + subSize * (captionText.size - 1) + (captionText.size - 1).coerceAtLeast(0) * 8f + captionInsetPad * 2f
+            val captionLeft = placement?.originX?.let { (it * width).coerceIn(0f, width - captionWidth) }
+                ?: captionInsetPad
+            val captionTop = placement?.originY?.let { (it * height).coerceIn(0f, height - captionHeight) }
+                ?: (height - captionInsetPad - captionHeight)
             val captionRect = RectF(
-                captionInset,
-                height - captionInset - captionHeight,
-                captionInset + maxCaptionWidth,
-                height - captionInset,
+                captionLeft,
+                captionTop,
+                captionLeft + captionWidth,
+                captionTop + captionHeight,
             )
             drawRoundRect(canvas, captionRect, 28f, palette.surface, shadow = true)
-            var y = captionRect.top + captionInset + titleSize
-            drawText(canvas, ellipsize(captionText[0], captionRect.width() - captionInset * 2f, titleSize, bold = true), captionRect.left + captionInset, y, titleSize, palette.onSurface, bold = true)
+            var y = captionRect.top + captionInsetPad + titleSize
+            drawText(canvas, ellipsize(captionText[0], captionRect.width() - captionInsetPad * 2f, titleSize, bold = true), captionRect.left + captionInsetPad, y, titleSize, palette.onSurface, bold = true)
             captionText.drop(1).forEach { line ->
                 y += subSize + 8f
-                drawText(canvas, ellipsize(line, captionRect.width() - captionInset * 2f, subSize), captionRect.left + captionInset, y, subSize, palette.onSurfaceVariant)
+                drawText(canvas, ellipsize(line, captionRect.width() - captionInsetPad * 2f, subSize), captionRect.left + captionInsetPad, y, subSize, palette.onSurfaceVariant)
             }
         }
 
-        if (options.showMiniMap && photo?.location != null) {
-            val mapRect = mapRectForCorner(options.mapCorner, width, height, mapSize, mapInset, captionText.isNotEmpty())
-            drawMap(canvas, listOf(photo), mapRect, palette, options)
+        options.cards.forEach { card ->
+            val cardPhoto = photosById[card.photoId] ?: return@forEach
+            drawCard(canvas, cardPhoto, card, width, height, palette)
         }
+
+        if (options.showMiniMap && captionPhoto?.location != null) {
+            val mapRect = options.mapPlacement?.let { placement ->
+                val shorter = min(width, height).toFloat()
+                val w = (placement.widthFrac * shorter).coerceAtLeast(64f)
+                val h = w
+                val cx = placement.centerX * width
+                val cy = placement.centerY * height
+                RectF(cx - w / 2f, cy - h / 2f, cx + w / 2f, cy + h / 2f)
+            } ?: mapRectForCorner(options.mapCorner, width, height, defaultMapSize, defaultMapInset, captionText.isNotEmpty())
+            drawMap(canvas, listOf(captionPhoto), mapRect, palette, options)
+        }
+    }
+
+    private fun drawSolidBackground(canvas: Canvas, rect: RectF, color: Int) {
+        canvas.drawRect(rect, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color })
+    }
+
+    /**
+     * Returns caption rows for the PHOTO_WITH_MAP template, ensuring the same value isn't
+     * shown twice (e.g. coordinates falling back into the title slot while [showCoordinates]
+     * also asks for an explicit coordinates row).
+     */
+    internal fun buildCaptionLines(
+        photo: GeoPhoto?,
+        showDate: Boolean,
+        showCoordinates: Boolean,
+    ): List<String> {
+        if (photo == null) return emptyList()
+        val address = photo.location?.addressText?.takeIf { it.isNotBlank() }
+        val note = photo.note?.takeIf { it.isNotBlank() }
+        val coordsLine = photo.location
+            ?.takeIf { showCoordinates }
+            ?.let { DateTimeFormatters.coordinates(it.latitude, it.longitude) }
+        val dateLine = if (showDate) DateTimeFormatters.photoDateTime(photo.capturedAtMillis) else null
+
+        // Pick a title that won't be repeated below. Address > user note > coordinates (only
+        // if we're not already going to render them as a separate row) > nothing.
+        val title = address
+            ?: note
+            ?: photo.location
+                ?.takeIf { coordsLine == null }
+                ?.let { shortCoordinates(it.latitude, it.longitude) }
+
+        return buildList {
+            if (title != null) add(title)
+            if (dateLine != null) add(dateLine)
+            if (coordsLine != null && coordsLine != title) add(coordsLine)
+        }
+    }
+
+    private fun drawCard(
+        canvas: Canvas,
+        photo: GeoPhoto,
+        card: CollageCard,
+        canvasWidth: Int,
+        canvasHeight: Int,
+        palette: Palette,
+    ) {
+        val shorter = min(canvasWidth, canvasHeight).toFloat()
+        val w = (card.widthFrac * shorter).coerceAtLeast(48f)
+        val h = w
+        val cx = card.centerX * canvasWidth
+        val cy = card.centerY * canvasHeight
+        val rect = RectF(cx - w / 2f, cy - h / 2f, cx + w / 2f, cy + h / 2f)
+        canvas.save()
+        if (card.rotationDeg != 0f) canvas.rotate(card.rotationDeg, cx, cy)
+        val corner = (min(rect.width(), rect.height()) * 0.12f).coerceIn(14f, 40f)
+        // White photo frame mat for that Instagram polaroid feel.
+        val matInset = (min(rect.width(), rect.height()) * 0.05f).coerceIn(6f, 20f)
+        val matRect = RectF(
+            rect.left - matInset,
+            rect.top - matInset,
+            rect.right + matInset,
+            rect.bottom + matInset,
+        )
+        drawRoundRect(canvas, matRect, corner + matInset * 0.6f, palette.surface, shadow = true)
+        val bitmap = decodeBitmap(photo.thumbnailUri ?: photo.imageUri, rect.width().toInt(), rect.height().toInt())
+        if (bitmap == null) {
+            drawRoundRect(canvas, rect, corner, palette.placeholder, shadow = false)
+        } else {
+            canvas.save()
+            canvas.clipPath(Path().apply { addRoundRect(rect, corner, corner, Path.Direction.CW) })
+            val src = cropSource(bitmap, rect)
+            canvas.drawBitmap(bitmap, src, rect, Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG))
+            canvas.restore()
+            bitmap.recycle()
+        }
+        canvas.restore()
     }
 
     private fun mapRectForCorner(
@@ -198,146 +290,10 @@ class CollageRenderer @Inject constructor(
         return "$trimmed…"
     }
 
-    private suspend fun drawMapStory(
-        canvas: Canvas,
-        photos: List<GeoPhoto>,
-        options: CollageOptions,
-        palette: Palette,
-        width: Int,
-        height: Int,
-    ) {
-        val margin = width * 0.055f
-        val titleSize = (width * 0.04f).coerceIn(38f, 60f)
-        val title = storyTitle(photos)
-        drawText(canvas, ellipsize(title, width - margin * 2f, titleSize, bold = true), margin, margin + titleSize, titleSize, palette.onBackground, bold = true)
-        val subSize = titleSize * 0.55f
-        drawText(canvas, storySubtitle(photos, options), margin, margin + titleSize + subSize + 12f, subSize, palette.onSurfaceVariant)
-
-        if (photos.size <= 1) {
-            val photo = photos.firstOrNull()
-            val card = RectF(margin, height * 0.20f, width - margin, height * 0.58f)
-            drawPhoto(canvas, photo, card, 36f, palette)
-            val mapRect = RectF(margin, height * 0.62f, width - margin, height - margin)
-            drawMap(canvas, photos, mapRect, palette, options)
-            return
-        }
-
-        val map = RectF(margin, height * 0.24f, width - margin, height * 0.72f)
-        drawMap(canvas, photos, map, palette, options)
-        val cardSize = min(width, height) * 0.22f
-        photos.take(8).forEachIndexed { index, photo ->
-            val rowTop = if (index % 2 == 0) margin + titleSize + subSize + 30f else height - margin - cardSize
-            val x = margin + (index / 2) * (cardSize * 0.96f)
-            val rect = RectF(x, rowTop, x + cardSize, rowTop + cardSize)
-            drawPhoto(canvas, photo, rect, 30f, palette)
-            photo.location?.let {
-                val points = MapBoundsProjector.project(photos.mapNotNull { it.location })
-                val point = points.getOrNull(photos.mapNotNull { it.location }.indexOf(it))
-                if (point != null) {
-                    drawLine(canvas, rect.centerX(), rect.centerY(), map.left + map.width() * point.x, map.top + map.height() * point.y, palette.tertiary)
-                }
-            }
-        }
-    }
-
-    private fun storyTitle(photos: List<GeoPhoto>): String {
-        val address = photos.firstOrNull { !it.location?.addressText.isNullOrBlank() }?.location?.addressText
-        if (!address.isNullOrBlank()) return address
-        val first = photos.firstOrNull() ?: return "GeoMapShots"
-        return collageTitle(first)
-    }
-
     private fun collageTitle(photo: GeoPhoto): String {
         photo.location?.addressText?.takeIf { it.isNotBlank() }?.let { return it }
         photo.location?.let { return shortCoordinates(it.latitude, it.longitude) }
         return DateTimeFormatters.galleryGroup(photo.capturedAtMillis)
-    }
-
-    private suspend fun drawTimeline(
-        canvas: Canvas,
-        photos: List<GeoPhoto>,
-        options: CollageOptions,
-        palette: Palette,
-        width: Int,
-        height: Int,
-    ) {
-        val margin = width * 0.06f
-        drawText(canvas, "Journey timeline", margin, margin + 44f, 48f, palette.onBackground, bold = true)
-        val mapHeight = height * 0.25f
-        val map = RectF(margin, height - margin - mapHeight, width - margin, height - margin)
-        drawMap(canvas, photos, map, palette, options)
-        val availableTop = margin + 92f
-        val availableBottom = map.top - margin
-        val itemHeight = ((availableBottom - availableTop) / photos.take(5).size.coerceAtLeast(1)).coerceAtMost(250f)
-        val lineX = margin + 35f
-        drawLine(canvas, lineX, availableTop, lineX, availableBottom, palette.primary, stroke = 5f)
-        photos.take(5).forEachIndexed { index, photo ->
-            val top = availableTop + itemHeight * index
-            drawPinDot(canvas, lineX, top + 60f, palette.primary)
-            val imageRect = RectF(lineX + 35f, top, lineX + 35f + itemHeight * 0.85f, top + itemHeight * 0.78f)
-            drawPhoto(canvas, photo, imageRect, 24f, palette)
-            drawText(canvas, DateTimeFormatters.photoDateTime(photo.capturedAtMillis), imageRect.right + 30f, top + 50f, 28f, palette.onSurface, bold = true)
-            if (options.showCoordinates) {
-                drawText(canvas, photo.displaySubtitle, imageRect.right + 30f, top + 94f, 23f, palette.onSurfaceVariant)
-            }
-        }
-    }
-
-    private suspend fun drawGridWithMap(
-        canvas: Canvas,
-        photos: List<GeoPhoto>,
-        options: CollageOptions,
-        palette: Palette,
-        width: Int,
-        height: Int,
-    ) {
-        val margin = width * 0.045f
-        val map = RectF(margin, margin, width - margin, height * 0.34f)
-        if (options.showMiniMap) drawMap(canvas, photos, map, palette, options)
-        val gridTop = map.bottom + margin
-        val cols = if (width > height) 4 else 3
-        val gap = 16f
-        val cell = ((width - margin * 2f - gap * (cols - 1)) / cols)
-        photos.take(12).forEachIndexed { index, photo ->
-            val row = index / cols
-            val col = index % cols
-            val left = margin + col * (cell + gap)
-            val top = gridTop + row * (cell + gap)
-            if (top + cell <= height - margin) {
-                drawPhoto(canvas, photo, RectF(left, top, left + cell, top + cell), 24f, palette)
-            }
-        }
-        drawText(canvas, "${photos.size} photo${if (photos.size == 1) "" else "s"} on the map", margin + 30f, map.bottom - 34f, 34f, Color.WHITE, bold = true)
-    }
-
-    private suspend fun drawPolaroid(
-        canvas: Canvas,
-        photos: List<GeoPhoto>,
-        options: CollageOptions,
-        palette: Palette,
-        width: Int,
-        height: Int,
-    ) {
-        val margin = width * 0.06f
-        drawText(canvas, "GeoMapShots", margin, margin + 42f, 46f, palette.onBackground, bold = true)
-        val map = RectF(width * 0.52f, margin, width - margin, height * 0.34f)
-        if (options.showMiniMap) drawMap(canvas, photos, map, palette, options)
-        val cols = if (width > height) 4 else 2
-        val cardWidth = (width - margin * 2f - 26f * (cols - 1)) / cols
-        val cardHeight = cardWidth * 1.18f
-        photos.take(8).forEachIndexed { index, photo ->
-            val col = index % cols
-            val row = index / cols
-            val left = margin + col * (cardWidth + 26f)
-            val top = height * 0.18f + row * (cardHeight + 24f)
-            val card = RectF(left, top, left + cardWidth, top + cardHeight)
-            if (card.bottom < height - margin) {
-                drawRoundRect(canvas, card, 20f, palette.surface, shadow = true)
-                drawPhoto(canvas, photo, RectF(card.left + 18f, card.top + 18f, card.right - 18f, card.bottom - 78f), 14f, palette)
-                val label = if (options.showDate) DateTimeFormatters.timeOnly(photo.capturedAtMillis) else photo.displaySubtitle
-                drawText(canvas, label, card.left + 24f, card.bottom - 34f, 24f, palette.onSurface, bold = true)
-            }
-        }
     }
 
     private suspend fun drawMap(
@@ -419,60 +375,6 @@ class CollageRenderer @Inject constructor(
         }
         drawCompass(canvas, rect, palette)
         ownedCachedBitmap?.recycle()
-    }
-
-    private fun drawPhotoMarker(
-        canvas: Canvas,
-        photo: GeoPhoto,
-        cx: Float,
-        cy: Float,
-        mapRect: RectF,
-    ) {
-        val markerSize = (min(mapRect.width(), mapRect.height()) * 0.28f).coerceIn(96f, 220f)
-        val cornerRadius = markerSize * 0.22f
-        val borderWidth = markerSize * 0.07f
-        val markerRect = RectF(
-            cx - markerSize / 2f,
-            cy - markerSize / 2f,
-            cx + markerSize / 2f,
-            cy + markerSize / 2f,
-        )
-        val borderRect = RectF(
-            markerRect.left - borderWidth,
-            markerRect.top - borderWidth,
-            markerRect.right + borderWidth,
-            markerRect.bottom + borderWidth,
-        )
-        canvas.drawRoundRect(
-            borderRect,
-            cornerRadius + borderWidth,
-            cornerRadius + borderWidth,
-            Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = Color.WHITE
-                setShadowLayer(markerSize * 0.18f, 0f, markerSize * 0.06f, 0x55000000)
-            },
-        )
-        val thumb = decodeBitmap(
-            uriString = photo.thumbnailUri ?: photo.imageUri,
-            reqWidth = markerSize.toInt(),
-            reqHeight = markerSize.toInt(),
-        )
-        if (thumb == null) {
-            canvas.drawRoundRect(
-                markerRect,
-                cornerRadius,
-                cornerRadius,
-                Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFE0E5E2.toInt() },
-            )
-            return
-        }
-        val clipPath = Path().apply { addRoundRect(markerRect, cornerRadius, cornerRadius, Path.Direction.CW) }
-        canvas.save()
-        canvas.clipPath(clipPath)
-        val src = cropSource(thumb, markerRect)
-        canvas.drawBitmap(thumb, src, markerRect, Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG))
-        canvas.restore()
-        thumb.recycle()
     }
 
     private fun drawSchematicMap(canvas: Canvas, photos: List<GeoPhoto>, rect: RectF, palette: Palette) {
@@ -622,7 +524,9 @@ class CollageRenderer @Inject constructor(
     }
 
     private fun drawPulsePin(canvas: Canvas, cx: Float, cy: Float, rect: RectF, palette: Palette) {
-        val base = (min(rect.width(), rect.height()) * 0.055f).coerceIn(14f, 38f)
+        // Keep in sync with PulsePin in CollageEditorScreen — both use ~3.5% of the map's
+        // shorter side so the live preview and exported PNG show the same marker size.
+        val base = (min(rect.width(), rect.height()) * 0.035f).coerceIn(9f, 24f)
         canvas.drawCircle(cx, cy, base * 2.4f, Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = palette.tertiary
             alpha = 40
@@ -804,37 +708,9 @@ class CollageRenderer @Inject constructor(
         })
     }
 
-    private fun drawLine(canvas: Canvas, startX: Float, startY: Float, endX: Float, endY: Float, color: Int, stroke: Float = 3f) {
-        canvas.drawLine(startX, startY, endX, endY, Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            this.color = color
-            strokeWidth = stroke
-            strokeCap = Paint.Cap.ROUND
-            alpha = 170
-        })
-    }
-
     private fun drawPinDot(canvas: Canvas, x: Float, y: Float, color: Int) {
         canvas.drawCircle(x, y, 18f, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = Color.WHITE })
         canvas.drawCircle(x, y, 12f, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color })
-    }
-
-    private fun storySubtitle(photos: List<GeoPhoto>, options: CollageOptions): String {
-        if (photos.isEmpty()) return "Choose photos to tell a place story"
-        if (photos.size == 1) {
-            val photo = photos.first()
-            return if (options.showDate) {
-                DateTimeFormatters.photoDateTime(photo.capturedAtMillis)
-            } else {
-                "1 mapped memory"
-            }
-        }
-        val minMillis = photos.minOf { it.capturedAtMillis }
-        val maxMillis = photos.maxOf { it.capturedAtMillis }
-        return if (options.showDate) {
-            "${DateTimeFormatters.photoDateTime(minMillis)} — ${DateTimeFormatters.photoDateTime(maxMillis)}"
-        } else {
-            "${photos.size} mapped memories"
-        }
     }
 
     private data class Palette(val dark: Boolean) {
