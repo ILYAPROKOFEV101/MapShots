@@ -2,11 +2,13 @@
 
 **A photo journal that keeps images connected to places, then turns them into shareable map collages.**
 
-Capture a picture, keep its available GPS reading, browse it on a map, and combine photographs, location labels and editable text in a PNG composition. Existing images can also be imported individually and assigned a location manually.
+Native Android application by [Ilya Prokofev](https://github.com/ILYAPROKOFEV101). Camera capture, geolocation, a local photo journal and a custom image compositor in Kotlin and Jetpack Compose.
 
-[Google Play](https://play.google.com/store/apps/details?id=com.ilya.safarshots) · [Engineering decisions](#engineering-decisions) · [Architecture](#architecture) · [Build and run](#build-and-run)
+[Google Play](https://play.google.com/store/apps/details?id=com.ilya.safarshots) · [Engineering highlights](#engineering-highlights) · [Engineering decisions](#engineering-decisions) · [Architecture](#architecture) · [Build and run](#build-and-run)
 
-`com.ilya.safarshots` · Android 7.0+ / API 24 · Kotlin · Jetpack Compose · CameraX · Room · Hilt
+`Kotlin` `Jetpack Compose` `CameraX` `Room` `Coroutines / Flow` `Hilt` `Google Maps` `Android Canvas`
+
+Android 7.0+ / API 24 · `com.ilya.safarshots`
 
 ## In the app
 
@@ -15,6 +17,16 @@ Capture a picture, keep its available GPS reading, browse it on a map, and combi
 | <img src="docs/portfolio/01-photo-map.png" width="220" alt="Published GeoStamp photo map with thumbnail markers"> | <img src="docs/portfolio/02-import.png" width="220" alt="Published GeoStamp import and manual location picker"> | <img src="docs/portfolio/03-collage.png" width="220" alt="Published GeoStamp photo and map collage editor"> |
 
 These are the published product's Google Play screenshots, including their original promotional framing. They are not new device-test captures. [Asset sources](docs/portfolio/SOURCES.md).
+
+## Engineering highlights
+
+| Engineering focus | Implementation to review |
+|---|---|
+| **Keep expensive work off the capture path** | Persist the photo record first, then generate thumbnails, color data and map snapshots in an application-scoped coroutine. Room Flow delivers the updates. [Capture repository](app/src/main/java/com/ilya/safarshots/data/repository/GeoPhotoRepositoryImpl.kt) |
+| **Build a custom editor and export pipeline** | Normalized layer geometry drives Compose editing and Canvas rendering; export sizing accounts for EXIF rotation and avoids upscaling the reference photo. [Layer model](app/src/main/java/com/ilya/safarshots/domain/model/CollageTemplate.kt) · [Renderer](app/src/main/java/com/ilya/safarshots/feature/collage/CollageRenderer.kt) · [Export sizing](app/src/main/java/com/ilya/safarshots/feature/collage/CollageExportSize.kt) |
+| **Design for unavailable map services** | Bounded memory caching, per-photo disk snapshots and a schematic map fallback give the renderer an explicit degradation path. [Maps client](app/src/main/java/com/ilya/safarshots/data/maps/StaticMapsClient.kt) · [Snapshot storage](app/src/main/java/com/ilya/safarshots/data/maps/MapSnapshotStorage.kt) |
+
+The [engineering decisions](#engineering-decisions) below explain the tradeoffs and current limits behind these implementations.
 
 ## Capabilities
 
