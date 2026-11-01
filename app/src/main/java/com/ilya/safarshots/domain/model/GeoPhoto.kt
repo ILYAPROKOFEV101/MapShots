@@ -19,7 +19,13 @@ data class GeoPhoto(
 ) {
     val hasLocation: Boolean = location != null
     val displayTitle: String = note?.takeIf { it.isNotBlank() } ?: fileName.substringBeforeLast('.')
-    val displaySubtitle: String = location?.addressText ?: location?.let {
+
+    /**
+     * Address (if known) or formatted coordinates. Returns `null` when the
+     * photo has no geo information so callers can render a localized
+     * fallback via [com.ilya.safarshots.R.string.common_no_location].
+     */
+    val locationSubtitle: String? = location?.addressText ?: location?.let {
         "%.5f, %.5f".format(java.util.Locale.US, it.latitude, it.longitude)
-    } ?: "No location"
+    }
 }

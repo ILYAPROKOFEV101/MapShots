@@ -1,11 +1,18 @@
 package com.ilya.safarshots.feature.gallery
 
+import com.ilya.safarshots.core.common.DateLabels
 import com.ilya.safarshots.domain.model.GeoPhoto
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.Calendar
 
 class GalleryDateGrouperTest {
+    private val labels = DateLabels(
+        today = "Today",
+        yesterday = "Yesterday",
+        thisWeek = "This week",
+    )
+
     @Test
     fun groupsPhotosByFriendlyDateBuckets() {
         val now = Calendar.getInstance().apply {
@@ -16,7 +23,8 @@ class GalleryDateGrouperTest {
         val thisWeek = Calendar.getInstance().apply { timeInMillis = now; add(Calendar.DAY_OF_YEAR, -3) }.timeInMillis
 
         val groups = GalleryDateGrouper.group(
-            listOf(photo("today", now), photo("yesterday", yesterday), photo("week", thisWeek)),
+            photos = listOf(photo("today", now), photo("yesterday", yesterday), photo("week", thisWeek)),
+            labels = labels,
             nowMillis = now,
         )
 

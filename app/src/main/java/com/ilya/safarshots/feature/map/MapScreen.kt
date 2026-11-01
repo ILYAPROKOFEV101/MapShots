@@ -39,7 +39,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,6 +54,7 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.ilya.safarshots.R
 import com.ilya.safarshots.core.permissions.PermissionController
 import com.ilya.safarshots.core.storage.ShareUtils
 import com.ilya.safarshots.design.EmptyState
@@ -69,11 +72,12 @@ fun MapScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val resources = LocalResources.current
     val context = LocalContext.current
 
-    LaunchedEffect(state.message) {
-        val message = state.message ?: return@LaunchedEffect
-        snackbarHostState.showSnackbar(message)
+    LaunchedEffect(state.messageRes, resources) {
+        val resId = state.messageRes ?: return@LaunchedEffect
+        snackbarHostState.showSnackbar(resources.getString(resId))
         viewModel.onEvent(MapUiEvent.MessageShown)
     }
 
@@ -87,17 +91,17 @@ fun MapScreen(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 icon = { Icon(Icons.Rounded.AddAPhoto, contentDescription = null) },
-                text = { Text("Capture") },
+                text = { Text(stringResource(R.string.map_capture)) },
             )
         },
-    ) { _ ->
-        Box(modifier = Modifier.fillMaxSize()) {
+    ) { contentPadding ->
+        Box(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
             when {
                 !state.mapsConfigured -> NoMapsKeyState(modifier = Modifier.fillMaxSize())
                 state.photos.isEmpty() -> EmptyState(
-                    title = "На карте пока пусто",
-                    subtitle = "Сделайте первое фото — и оно появится здесь как красивый pin.",
-                    buttonText = "Сделать фото",
+                    title = stringResource(R.string.map_empty_title),
+                    subtitle = stringResource(R.string.map_empty_subtitle),
+                    buttonText = stringResource(R.string.map_empty_button),
                     modifier = Modifier.align(Alignment.Center),
                     onButtonClick = onOpenCamera,
                 )
@@ -110,7 +114,7 @@ fun MapScreen(
             }
 
             FloatingSearchBar(
-                title = "GeoMapShots",
+                title = stringResource(R.string.app_name),
                 onSettings = onOpenSettings,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -185,7 +189,7 @@ private fun FloatingSearchBar(
                 modifier = Modifier.weight(1f),
             )
             FilledTonalIconButton(onClick = onSettings) {
-                Icon(Icons.Rounded.Settings, contentDescription = "Settings")
+                Icon(Icons.Rounded.Settings, contentDescription = stringResource(R.string.map_settings_cd))
             }
         }
     }
@@ -202,7 +206,7 @@ private fun FilterRow(selected: MapFilter, onFilter: (MapFilter) -> Unit) {
             val filter = MapFilter.entries[index]
             ElevatedChip(
                 selected = selected == filter,
-                label = filter.label,
+                label = stringResource(filter.labelRes),
                 onClick = { onFilter(filter) },
             )
         }
@@ -235,6 +239,7 @@ private fun PhotoMap(
     onMarkerSelect: (String) -> Unit,
 ) {
     val context = LocalContext.current
+    val noLocationLabel = stringResource(R.string.common_no_location)
     val photosWithLocation = photos.filter { it.location != null }
     val start = photosWithLocation.firstOrNull()?.location
     val cameraPositionState = rememberCameraPositionState {
@@ -262,7 +267,7 @@ private fun PhotoMap(
             Marker(
                 state = remember(photo.id) { MarkerState(position = LatLng(location.latitude, location.longitude)) },
                 title = photo.displayTitle,
-                snippet = photo.displaySubtitle,
+                snippet = photo.locationSubtitle ?: noLocationLabel,
                 icon = icon,
                 onClick = {
                     onMarkerClick(photo.id)
@@ -279,8 +284,8 @@ private fun PhotoMap(
 @Composable
 private fun NoMapsKeyState(modifier: Modifier = Modifier) {
     EmptyState(
-        title = "Google Maps API key не настроен",
-        subtitle = "Добавьте MAPS_API_KEY в local.properties и перезапустите приложение.",
+        title = stringResource(R.string.map_no_api_title),
+        subtitle = stringResource(R.string.map_no_api_subtitle),
         buttonText = null,
         icon = Icons.Rounded.Settings,
         modifier = modifier,
@@ -307,10 +312,10 @@ private fun SelectionBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             FilledTonalIconButton(onClick = onClear) {
-                Icon(Icons.Rounded.Close, contentDescription = "Clear")
+                Icon(Icons.Rounded.Close, contentDescription = stringResource(R.string.map_clear_cd))
             }
             Text(
-                text = "$count фото",
+                text = stringResource(R.string.photo_count, count),
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -318,7 +323,7 @@ private fun SelectionBar(
             TextButton(onClick = onCreate) {
                 Icon(Icons.Rounded.Collections, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text("Создать коллаж")
+                Text(stringResource(R.string.map_create_collage))
             }
         }
     }

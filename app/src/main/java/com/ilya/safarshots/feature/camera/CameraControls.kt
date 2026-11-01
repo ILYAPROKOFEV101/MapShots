@@ -19,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ilya.safarshots.R
 
 @Composable
 fun CameraControls(
@@ -37,13 +39,13 @@ fun CameraControls(
     ) {
         CircleControl(
             icon = if (gridEnabled) Icons.Rounded.GridOn else Icons.Rounded.GridOff,
-            contentDescription = "Toggle grid",
+            contentDescription = stringResource(R.string.camera_grid_cd),
             onClick = onToggleGrid,
         )
         CaptureButton(enabled = !isSaving, onClick = onCapture)
         CircleControl(
             icon = Icons.Rounded.Cameraswitch,
-            contentDescription = "Switch camera",
+            contentDescription = stringResource(R.string.camera_flip_cd),
             onClick = onFlip,
         )
     }

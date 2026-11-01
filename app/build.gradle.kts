@@ -15,6 +15,13 @@ val localProperties = Properties().apply {
 }
 
 val mapsApiKey = localProperties.getProperty("MAPS_API_KEY").orEmpty()
+fun duntaId(name: String): Int {
+    val value = providers.gradleProperty(name).orNull ?: localProperties.getProperty(name) ?: "0"
+    return value.toIntOrNull()?.takeIf { it >= 0 }
+        ?: error("$name must be a non-negative integer")
+}
+val duntaPartnerId = duntaId("DUNTA_PARTNER_ID")
+val duntaApplicationId = duntaId("DUNTA_APPLICATION_ID")
 
 android {
     namespace = "com.ilya.safarshots"
@@ -28,12 +35,14 @@ android {
         applicationId = "com.ilya.safarshots"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
         buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+        buildConfigField("int", "DUNTA_PARTNER_ID", duntaPartnerId.toString())
+        buildConfigField("int", "DUNTA_APPLICATION_ID", duntaApplicationId.toString())
     }
 
     buildTypes {
@@ -57,8 +66,11 @@ android {
 }
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -89,6 +101,12 @@ dependencies {
     implementation(libs.google.play.services.location)
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.work.multiprocess)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.fragment)
+    implementation(libs.android.installreferrer)
+    implementation(libs.google.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

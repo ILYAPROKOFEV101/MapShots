@@ -1,8 +1,10 @@
 package com.ilya.safarshots.feature.map
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ilya.safarshots.BuildConfig
+import com.ilya.safarshots.R
 import com.ilya.safarshots.domain.model.GeoPhoto
 import com.ilya.safarshots.domain.usecase.DeleteGeoPhotoUseCase
 import com.ilya.safarshots.domain.usecase.GetGeoPhotosUseCase
@@ -17,13 +19,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-enum class MapFilter(val label: String) {
-    ALL("All"),
-    TODAY("Today"),
-    WEEK("This week"),
-    FAVORITES("Favorites"),
-    WITH_NOTES("With notes"),
-    NO_LOCATION("No location"),
+enum class MapFilter(@StringRes val labelRes: Int) {
+    ALL(R.string.filter_all),
+    TODAY(R.string.filter_today),
+    WEEK(R.string.filter_week),
+    FAVORITES(R.string.filter_favorites),
+    WITH_NOTES(R.string.filter_with_notes),
+    NO_LOCATION(R.string.filter_no_location),
 }
 
 data class MapUiState(
@@ -32,7 +34,7 @@ data class MapUiState(
     val selectedPhotoId: String? = null,
     val selectedPhotoIds: Set<String> = emptySet(),
     val mapsConfigured: Boolean = BuildConfig.MAPS_API_KEY.isNotBlank(),
-    val message: String? = null,
+    @StringRes val messageRes: Int? = null,
 )
 
 sealed interface MapUiEvent {
@@ -71,11 +73,11 @@ class MapViewModel @Inject constructor(
             is MapUiEvent.ToggleFavorite -> viewModelScope.launch { toggleFavorite(event.photoId) }
             is MapUiEvent.DeletePhoto -> viewModelScope.launch {
                 deleteGeoPhoto(event.photoId)
-                _state.update { it.copy(selectedPhotoId = null, message = "Фото удалено") }
+                _state.update { it.copy(selectedPhotoId = null, messageRes = R.string.map_photo_deleted) }
             }
             MapUiEvent.ClearSelection -> _state.update { it.copy(selectedPhotoIds = emptySet()) }
             MapUiEvent.DismissPhoto -> _state.update { it.copy(selectedPhotoId = null) }
-            MapUiEvent.MessageShown -> _state.update { it.copy(message = null) }
+            MapUiEvent.MessageShown -> _state.update { it.copy(messageRes = null) }
         }
     }
 

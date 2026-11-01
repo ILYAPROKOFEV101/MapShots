@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_shape"
+    android:clipToOutline="true"
+    android:fillViewport="false"
+    android:overScrollMode="ifContentScrolls">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="280dp"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="20dp">
+
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/dunta_dialog_icon_container">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_dunta_privacy_24" />
+        </FrameLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/proxyDescriptionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="sans"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/dunta_dialog_on_surface"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/proxyDescriptionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:fontFamily="sans"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/proxy_description_text"
+            android:textColor="@color/dunta_dialog_on_surface_variant"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/proxyDescriptionAcceptBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="26dp"
+            android:background="@drawable/dunta_dialog_primary_button"
+            android:elevation="0dp"
+            android:fontFamily="sans"
+            android:minHeight="48dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:stateListAnimator="@null"
+            android:text="@string/proxy_description_accept_btn"
+            android:textAllCaps="false"
+            android:textColor="@color/dunta_dialog_on_primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/proxyDescriptionDeclineBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/dunta_dialog_text_button"
+            android:elevation="0dp"
+            android:fontFamily="sans"
+            android:minHeight="48dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:stateListAnimator="@null"
+            android:text="@string/proxy_description_decline_btn"
+            android:textAllCaps="false"
+            android:textColor="@color/dunta_dialog_primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/proxyDescriptionPolicy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="sans"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minHeight="32dp"
+            android:text="@string/proxy_description_policy_text"
+            android:textColor="@color/dunta_dialog_on_surface_variant"
+            android:textColorLink="@color/dunta_dialog_primary"
+            android:textSize="12sp" />
+    </LinearLayout>
+</ScrollView>

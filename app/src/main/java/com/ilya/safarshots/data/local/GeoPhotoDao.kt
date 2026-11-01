@@ -33,6 +33,34 @@ interface GeoPhotoDao {
     @Query("UPDATE geo_photos SET addressText = :addressText WHERE id = :id")
     suspend fun updateAddressText(id: String, addressText: String?)
 
+    @Query(
+        """
+        UPDATE geo_photos
+        SET latitude = :latitude,
+            longitude = :longitude,
+            altitude = :altitude,
+            accuracyMeters = :accuracyMeters,
+            addressText = :addressText,
+            locationProvider = :provider,
+            hasLocation = :hasLocation,
+            isApproximateLocation = :isApproximate,
+            mapSnapshotUri = :mapSnapshotUri
+        WHERE id = :id
+        """,
+    )
+    suspend fun updateLocation(
+        id: String,
+        latitude: Double?,
+        longitude: Double?,
+        altitude: Double?,
+        accuracyMeters: Float?,
+        addressText: String?,
+        provider: String?,
+        hasLocation: Boolean,
+        isApproximate: Boolean,
+        mapSnapshotUri: String?,
+    )
+
     @Query("UPDATE geo_photos SET mapSnapshotUri = :uri WHERE id = :id")
     suspend fun updateMapSnapshotUri(id: String, uri: String?)
 

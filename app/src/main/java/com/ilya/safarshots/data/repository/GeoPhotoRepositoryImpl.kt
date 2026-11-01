@@ -41,56 +41,57 @@ class GeoPhotoRepositoryImpl @Inject constructor(
         return ids.mapNotNull { byId[it]?.toDomain() }
     }
 
+    override suspend fun saveImportedPhoto(
+        sourceUri: String,
+        location: PhotoLocation?,
+    ): GeoPhoto = withContext(Dispatchers.IO) {
+        val importedFile = photoStorage.importFromUri(sourceUri)
+            ?: error("Failed to import photo")
+        val entity = savePhotoEntity(
+            originalFile = importedFile,
+            location = location,
+            cameraFacing = "imported",
+        )
+        entity.toDomain()
+    }
+
     override suspend fun saveCapturedPhoto(
         originalFile: File,
         location: PhotoLocation?,
         cameraFacing: String?,
     ): GeoPhoto = withContext(Dispatchers.IO) {
-        // Fast path: only cheap metadata (header bounds + EXIF). No bitmap decode here.
-        val metadata = photoStorage.readFastMetadata(originalFile)
-        val entity = GeoPhotoEntity(
-            id = UUID.randomUUID().toString(),
-            photoUri = originalFile.toUri().toString(),
-            thumbnailUri = null,
-            fileName = originalFile.name,
-            createdAtMillis = System.currentTimeMillis(),
+        if (location != null) {
+            // Keep the source JPEG self-contained as well as storing the same location in
+            // Room. If the file is shared or re-imported later, its GPS tag is still present.
+            photoStorage.writeLocationExif(originalFile, location)
+        }
+        val entity = savePhotoEntity(originalFile, location, cameraFacing)
+        entity.toDomain()
+    }
+
+    override suspend fun updatePhotoLocation(id: String, location: PhotoLocation?) = withContext(Dispatchers.IO) {
+        val entity = dao.getById(id) ?: return@withContext
+        dao.updateLocation(
+            id = id,
             latitude = location?.latitude,
             longitude = location?.longitude,
             altitude = location?.altitude,
             accuracyMeters = location?.accuracyMeters,
             addressText = location?.addressText,
-            cameraFacing = cameraFacing,
-            width = metadata.width,
-            height = metadata.height,
-            orientationDegrees = metadata.orientationDegrees,
-            isFavorite = false,
-            note = null,
-            addedToCollageCount = 0,
-            colorSeed = null,
-            locationProvider = location?.provider,
+            provider = location?.provider,
             hasLocation = location != null,
-            isApproximateLocation = location?.isApproximate == true,
+            isApproximate = location?.isApproximate == true,
+            mapSnapshotUri = null,
         )
-        dao.upsert(entity)
-
-        // Heavy enrichment runs in the background so the UI can navigate right away.
-        applicationScope.launch(Dispatchers.IO) {
-            runCatching {
-                val thumbnailUri = photoStorage.createThumbnail(originalFile)
-                if (thumbnailUri != null) dao.updateThumbnailUri(entity.id, thumbnailUri)
-            }
-            runCatching {
-                val colorSeed = photoStorage.readColorSeedAsync(originalFile)
-                if (colorSeed != null) dao.updateColorSeed(entity.id, colorSeed)
-            }
-            if (location != null) {
+        mapSnapshotStorage.deleteFor(entity.id)
+        if (location != null) {
+            applicationScope.launch(Dispatchers.IO) {
                 runCatching {
                     val snapshotUri = mapSnapshotStorage.captureFor(entity.id, location)
                     if (snapshotUri != null) dao.updateMapSnapshotUri(entity.id, snapshotUri)
                 }
             }
         }
-        entity.toDomain()
     }
 
     override suspend fun ensureMapSnapshot(photoId: String, dark: Boolean): String? {
@@ -135,5 +136,64 @@ class GeoPhotoRepositoryImpl @Inject constructor(
         dao.deleteAll()
         photoStorage.deleteAllPhotoFiles()
         mapSnapshotStorage.deleteAll()
+    }
+
+    private suspend fun savePhotoEntity(
+        originalFile: File,
+        location: PhotoLocation?,
+        cameraFacing: String?,
+    ): GeoPhotoEntity {
+        // Fast path: only cheap metadata (header bounds + EXIF). No bitmap decode here.
+        val metadata = photoStorage.readFastMetadata(originalFile)
+        val entity = GeoPhotoEntity(
+            id = UUID.randomUUID().toString(),
+            photoUri = originalFile.toUri().toString(),
+            thumbnailUri = null,
+            fileName = originalFile.name,
+            createdAtMillis = System.currentTimeMillis(),
+            latitude = location?.latitude,
+            longitude = location?.longitude,
+            altitude = location?.altitude,
+            accuracyMeters = location?.accuracyMeters,
+            addressText = location?.addressText,
+            cameraFacing = cameraFacing,
+            width = metadata.width,
+            height = metadata.height,
+            orientationDegrees = metadata.orientationDegrees,
+            isFavorite = false,
+            note = null,
+            addedToCollageCount = 0,
+            colorSeed = null,
+            locationProvider = location?.provider,
+            hasLocation = location != null,
+            isApproximateLocation = location?.isApproximate == true,
+        )
+        dao.upsert(entity)
+        enqueueEnrichment(entity, originalFile, location)
+        return entity
+    }
+
+    private fun enqueueEnrichment(
+        entity: GeoPhotoEntity,
+        originalFile: File,
+        location: PhotoLocation?,
+    ) {
+        // Heavy enrichment runs in the background so the UI can navigate right away.
+        applicationScope.launch(Dispatchers.IO) {
+            runCatching {
+                val thumbnailUri = photoStorage.createThumbnail(originalFile)
+                if (thumbnailUri != null) dao.updateThumbnailUri(entity.id, thumbnailUri)
+            }
+            runCatching {
+                val colorSeed = photoStorage.readColorSeedAsync(originalFile)
+                if (colorSeed != null) dao.updateColorSeed(entity.id, colorSeed)
+            }
+            if (location != null) {
+                runCatching {
+                    val snapshotUri = mapSnapshotStorage.captureFor(entity.id, location)
+                    if (snapshotUri != null) dao.updateMapSnapshotUri(entity.id, snapshotUri)
+                }
+            }
+        }
     }
 }

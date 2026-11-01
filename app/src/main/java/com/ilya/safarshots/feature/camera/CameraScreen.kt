@@ -44,11 +44,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ilya.safarshots.R
 import com.ilya.safarshots.core.permissions.PermissionController
 import com.ilya.safarshots.design.PermissionCard
 
@@ -60,6 +63,7 @@ fun CameraScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val resources = LocalResources.current
     val context = LocalContext.current
     var hasCamera by remember { mutableStateOf(PermissionController.hasCamera(context)) }
     var hasLocation by remember { mutableStateOf(PermissionController.hasAnyLocation(context)) }
@@ -78,18 +82,19 @@ fun CameraScreen(
     }
     val locationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         hasLocation = PermissionController.hasAnyLocation(context)
+        viewModel.onLocationPermissionChanged(hasLocation)
     }
 
     LaunchedEffect(flashMode) {
         imageCapture.flashMode = flashMode
     }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(resources) {
         if (!hasLocation) {
             locationPermission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
         }
         viewModel.effects.collect { effect ->
             when (effect) {
-                is CameraEffect.Message -> snackbarHostState.showSnackbar(effect.text)
+                is CameraEffect.Message -> snackbarHostState.showSnackbar(resources.getString(effect.textRes))
                 is CameraEffect.PhotoSaved -> onPhotoSaved(effect.photoId)
             }
         }
@@ -99,20 +104,20 @@ fun CameraScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = Color.Black,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-    ) { _ ->
+    ) { contentPadding ->
         if (!hasCamera) {
-            Box(Modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxSize().padding(contentPadding).background(Color.Black), contentAlignment = Alignment.Center) {
                 PermissionCard(
-                    title = "Нужен доступ к камере",
-                    subtitle = "Чтобы делать фото прямо в приложении.",
-                    buttonText = "Разрешить камеру",
+                    title = stringResource(R.string.camera_permission_title),
+                    subtitle = stringResource(R.string.camera_permission_subtitle),
+                    buttonText = stringResource(R.string.camera_permission_button),
                     onClick = { cameraPermission.launch(Manifest.permission.CAMERA) },
                 )
             }
             return@Scaffold
         }
 
-        Box(Modifier.fillMaxSize().background(Color.Black)) {
+        Box(Modifier.fillMaxSize().padding(contentPadding).background(Color.Black)) {
             CameraPreview(
                 imageCapture = imageCapture,
                 lensFacing = lensFacing,
@@ -159,7 +164,7 @@ fun CameraScreen(
 
                             override fun onError(exception: ImageCaptureException) {
                                 file.delete()
-                                viewModel.onCaptureError(exception.message ?: "Не удалось сделать фото")
+                                viewModel.onCaptureError()
                             }
                         },
                     )
@@ -196,11 +201,11 @@ private fun CameraTopBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ScrimIconButton(scrim = scrim, onClick = onClose, contentDescription = "Close") {
+        ScrimIconButton(scrim = scrim, onClick = onClose, contentDescription = stringResource(R.string.camera_close_cd)) {
             Icon(Icons.Rounded.Close, contentDescription = null, tint = Color.White)
         }
         LocationPill(locationStatus = locationStatus)
-        ScrimIconButton(scrim = scrim, onClick = onFlashChange, contentDescription = "Flash") {
+        ScrimIconButton(scrim = scrim, onClick = onFlashChange, contentDescription = stringResource(R.string.camera_flash_cd)) {
             val icon = when (flashMode) {
                 ImageCapture.FLASH_MODE_ON -> Icons.Rounded.FlashOn
                 ImageCapture.FLASH_MODE_AUTO -> Icons.Rounded.FlashAuto
@@ -237,8 +242,6 @@ private fun ScrimIconButton(
 
 @Composable
 private fun LocationPill(locationStatus: LocationStatus) {
-    val available = locationStatus.label.lowercase().contains("ok") ||
-        locationStatus.label.lowercase().contains("loc")
     Surface(
         shape = RoundedCornerShape(20.dp),
         color = Color.Black.copy(alpha = 0.4f),
@@ -249,12 +252,12 @@ private fun LocationPill(locationStatus: LocationStatus) {
             horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             Icon(
-                imageVector = if (available) Icons.Rounded.LocationOn else Icons.Rounded.LocationOff,
+                imageVector = if (locationStatus.isAvailable) Icons.Rounded.LocationOn else Icons.Rounded.LocationOff,
                 contentDescription = null,
                 tint = Color.White,
             )
             Text(
-                locationStatus.label,
+                stringResource(locationStatus.labelRes),
                 color = Color.White,
                 style = MaterialTheme.typography.labelLarge,
             )

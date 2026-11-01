@@ -37,7 +37,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.ilya.safarshots.R
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ilya.safarshots.core.common.DateTimeFormatters
@@ -138,7 +140,7 @@ private fun PhotoGridItem(
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
-                photo.displaySubtitle,
+                photo.locationSubtitle ?: stringResource(R.string.common_no_location),
                 color = Color.White.copy(alpha = 0.85f),
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
@@ -154,7 +156,7 @@ private fun PhotoGridItem(
                 if (selected) {
                     Icon(
                         Icons.Rounded.Check,
-                        contentDescription = "Selected",
+                        contentDescription = stringResource(R.string.photo_selected_cd),
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.padding(4.dp),
                     )

@@ -1,5 +1,7 @@
 package com.ilya.safarshots.feature.gallery
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddAPhoto
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Collections
+import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
@@ -25,18 +28,27 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ilya.safarshots.R
+import com.ilya.safarshots.core.locale.rememberDateLabels
 import com.ilya.safarshots.design.EmptyState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,18 +61,38 @@ fun GalleryScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val filtered = state.filteredPhotos()
-    val groups = GalleryDateGrouper.group(filtered)
+    val dateLabels = rememberDateLabels()
+    val groups = GalleryDateGrouper.group(filtered, dateLabels)
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val resources = LocalResources.current
+    val context = LocalContext.current
+    val importPhotoPicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { viewModel.importPhoto(it.toString()) }
+    }
+
+    LaunchedEffect(resources) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                is GalleryEffect.Message -> snackbarHostState.showSnackbar(resources.getString(effect.textRes))
+                is GalleryEffect.PhotoImported -> onOpenPhoto(effect.photoId)
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         containerColor = MaterialTheme.colorScheme.surface,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             LargeTopAppBar(
-                title = { Text("Gallery") },
+                title = { Text(stringResource(R.string.gallery_title)) },
                 actions = {
+                    IconButton(onClick = { importPhotoPicker.launch("image/*") }) {
+                        Icon(Icons.Rounded.PhotoLibrary, contentDescription = stringResource(R.string.gallery_import_cd))
+                    }
                     IconButton(onClick = onOpenCamera) {
-                        Icon(Icons.Rounded.AddAPhoto, contentDescription = "Open camera")
+                        Icon(Icons.Rounded.AddAPhoto, contentDescription = stringResource(R.string.gallery_open_camera_cd))
                     }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
@@ -88,10 +120,10 @@ fun GalleryScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         FilledTonalIconButton(onClick = { viewModel.onEvent(GalleryUiEvent.ClearSelection) }) {
-                            Icon(Icons.Rounded.Close, contentDescription = "Clear")
+                            Icon(Icons.Rounded.Close, contentDescription = stringResource(R.string.action_clear))
                         }
                         Text(
-                            "${state.selectedIds.size} фото",
+                            stringResource(R.string.photo_count, state.selectedIds.size),
                             modifier = Modifier.weight(1f),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -99,7 +131,7 @@ fun GalleryScreen(
                         FilledTonalButton(onClick = { onCreateCollage(state.selectedIds.toList()) }) {
                             Icon(Icons.Rounded.Collections, contentDescription = null)
                             Spacer(Modifier.width(8.dp))
-                            Text("Collage")
+                            Text(stringResource(R.string.gallery_collage))
                         }
                     }
                 }
@@ -110,9 +142,9 @@ fun GalleryScreen(
             GalleryFilterRow(state.filter) { viewModel.onEvent(GalleryUiEvent.FilterChanged(it)) }
             if (state.photos.isEmpty()) {
                 EmptyState(
-                    title = "Сделайте первое фото",
-                    subtitle = "Фото появятся в галерее и на карте сразу после съёмки.",
-                    buttonText = "Открыть камеру",
+                    title = stringResource(R.string.gallery_empty_title),
+                    subtitle = stringResource(R.string.gallery_empty_subtitle),
+                    buttonText = stringResource(R.string.gallery_empty_button),
                     modifier = Modifier.fillMaxSize(),
                     onButtonClick = onOpenCamera,
                 )
@@ -148,7 +180,7 @@ private fun GalleryFilterRow(selected: GalleryFilter, onFilter: (GalleryFilter) 
             FilterChip(
                 selected = selected == filter,
                 onClick = { onFilter(filter) },
-                label = { Text(filter.label) },
+                label = { Text(stringResource(filter.labelRes)) },
                 shape = RoundedCornerShape(16.dp),
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,

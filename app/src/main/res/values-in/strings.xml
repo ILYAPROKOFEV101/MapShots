@@ -1,0 +1,328 @@
+<resources>
+    <string name="app_name">PinPix: Peta Foto</string>
+
+    <!-- Common actions -->
+    <string name="action_cancel">Batal</string>
+    <string name="action_save">Simpan</string>
+    <string name="action_delete">Hapus</string>
+    <string name="action_done">Selesai</string>
+    <string name="action_back">Kembali</string>
+    <string name="action_close">Tutup</string>
+    <string name="action_continue">Lanjutkan</string>
+    <string name="action_open">Buka</string>
+    <string name="action_share">Bagikan</string>
+    <string name="action_clear">Bersihkan</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_map">Peta</string>
+    <string name="nav_camera">Kamera</string>
+    <string name="nav_gallery">Galeri</string>
+    <string name="nav_collage">Kolase</string>
+    <string name="nav_settings">Setelan</string>
+
+    <!-- Map screen -->
+    <string name="map_capture">Ambil foto</string>
+    <string name="map_empty_title">Peta masih kosong</string>
+    <string name="map_empty_subtitle">Ambil foto pertama Anda dan foto tersebut akan muncul di sini sebagai pin yang indah.</string>
+    <string name="map_empty_button">Ambil foto</string>
+    <string name="map_no_api_title">Kunci API Google Maps belum dikonfigurasi</string>
+    <string name="map_no_api_subtitle">Tambahkan MAPS_API_KEY ke local.properties, lalu mulai ulang aplikasi.</string>
+    <string name="map_settings_cd">Setelan</string>
+    <string name="map_clear_cd">Bersihkan</string>
+    <string name="map_create_collage">Buat kolase</string>
+    <string name="photo_count">%1$d foto</string>
+    <string name="map_photo_deleted">Foto dihapus</string>
+
+    <!-- Filters -->
+    <string name="filter_all">Semua</string>
+    <string name="filter_today">Hari ini</string>
+    <string name="filter_week">Minggu ini</string>
+    <string name="filter_favorites">Favorit</string>
+    <string name="filter_with_notes">Dengan catatan</string>
+    <string name="filter_no_location">Tanpa lokasi</string>
+    <string name="filter_with_location">Dengan lokasi</string>
+
+    <!-- Camera -->
+    <string name="camera_permission_title">Izin kamera diperlukan</string>
+    <string name="camera_permission_subtitle">Untuk mengambil foto langsung di aplikasi.</string>
+    <string name="camera_permission_button">Izinkan kamera</string>
+    <string name="camera_close_cd">Tutup</string>
+    <string name="camera_flash_cd">Lampu kilat</string>
+    <string name="camera_grid_cd">Aktifkan/nonaktifkan kisi</string>
+    <string name="camera_flip_cd">Ganti kamera</string>
+    <string name="camera_capture_failed">Gagal mengambil foto</string>
+    <string name="camera_save_failed">Gagal menyimpan foto</string>
+    <string name="location_searching">Mencari lokasi…</string>
+    <string name="location_ready">Lokasi siap</string>
+    <string name="location_approximate">Lokasi perkiraan</string>
+    <string name="location_none">Tidak ada lokasi</string>
+
+    <!-- Gallery -->
+    <string name="gallery_title">Galeri</string>
+    <string name="gallery_import_cd">Impor foto</string>
+    <string name="gallery_open_camera_cd">Buka kamera</string>
+    <string name="gallery_collage">Kolase</string>
+    <string name="gallery_empty_title">Ambil foto pertama Anda</string>
+    <string name="gallery_empty_subtitle">Foto akan muncul di galeri dan peta segera setelah diambil.</string>
+    <string name="gallery_empty_button">Buka kamera</string>
+    <string name="gallery_import_failed">Gagal mengimpor foto</string>
+    <string name="photo_selected_cd">Dipilih</string>
+
+    <!-- Photo detail -->
+    <string name="photo_detail_default_title">Foto</string>
+    <string name="photo_detail_favorite_cd">Favorit</string>
+    <string name="photo_detail_not_found_title">Foto tidak ditemukan</string>
+    <string name="photo_detail_not_found_subtitle">Foto mungkin telah dihapus.</string>
+    <string name="photo_detail_note_dialog_title">Catatan</string>
+    <string name="photo_detail_delete_dialog_title">Hapus foto?</string>
+    <string name="photo_detail_delete_dialog_text">Catatan dan file lokal akan dihapus secara permanen.</string>
+    <string name="photo_detail_location_title">Lokasi foto</string>
+    <string name="photo_detail_location_subtitle">Ketuk peta untuk memilih titik. Layar ini berfungsi seperti pemilih lokasi Google Maps.</string>
+    <string name="photo_detail_location_no_map">Peta tidak tersedia: tambahkan MAPS_API_KEY. Anda dapat memasukkan koordinat secara manual.</string>
+    <string name="photo_detail_latitude_label">Lintang (lat)</string>
+    <string name="photo_detail_longitude_label">Bujur (lng)</string>
+    <string name="photo_detail_address_label">Keterangan alamat (opsional)</string>
+    <string name="photo_detail_picker_marker_title">Titik yang dipilih</string>
+    <string name="photo_detail_picker_no_point">Belum ada titik yang dipilih</string>
+    <string name="photo_detail_remove_location">Hapus geotag</string>
+    <string name="photo_detail_invalid_coordinates">Masukkan koordinat yang valid</string>
+    <string name="photo_detail_coordinates_out_of_range">Koordinat berada di luar rentang yang diizinkan</string>
+    <string name="photo_detail_location_saved">Lokasi disimpan</string>
+    <string name="photo_detail_location_removed">Lokasi dihapus</string>
+    <string name="photo_detail_add_note">Tambah catatan</string>
+    <string name="photo_detail_edit_note">Edit catatan</string>
+    <string name="photo_detail_set_location">Atur lokasi</string>
+    <string name="photo_detail_edit_location">Edit lokasi</string>
+    <string name="photo_detail_no_location">Tidak ada lokasi</string>
+    <string name="photo_detail_location_saved_label">Lokasi disimpan</string>
+    <string name="photo_detail_accuracy">Akurasi %1$d m</string>
+    <string name="photo_detail_collage">Kolase</string>
+    <string name="photo_detail_share">Bagikan</string>
+    <string name="photo_detail_map">Peta</string>
+    <string name="photo_detail_delete">Hapus</string>
+
+    <!-- Photo bottom sheet -->
+    <string name="photo_sheet_open">Buka</string>
+    <string name="photo_sheet_collage">Kolase</string>
+    <string name="photo_sheet_favorite_cd">Favorit</string>
+    <string name="photo_sheet_share_cd">Bagikan</string>
+    <string name="photo_sheet_delete_cd">Hapus</string>
+
+    <!-- Collage picker -->
+    <string name="collage_title">Kolase</string>
+    <string name="collage_template_step_title">Templat kolase</string>
+    <string name="collage_back_to_photos_cd">Kembali ke pemilihan foto</string>
+    <string name="collage_clear_selection_cd">Hapus pilihan</string>
+    <string name="collage_picker_empty_title">Pilih foto untuk kolase</string>
+    <string name="collage_picker_empty_subtitle">Anda dapat memilih foto di peta atau galeri.</string>
+    <string name="collage_picker_empty_button">Buka galeri</string>
+    <string name="collage_pick_hint">Pilih 1–12 foto</string>
+    <string name="collage_pick_progress">%1$d dari 12 dipilih · Anda dapat menambahkan lagi</string>
+    <string name="collage_template_ready">%1$d foto siap untuk kolase</string>
+    <string name="collage_template_pick_subtitle">Pilih tata letak yang sesuai dengan foto Anda. Anda dapat mengubah format dan gaya di editor.</string>
+    <string name="collage_template_photo_requirement">%1$d+ foto</string>
+    <string name="collage_template_more_photos_needed">Pilih minimal %1$d foto</string>
+
+    <!-- Collage editor -->
+    <string name="collage_editor_export">Ekspor</string>
+    <string name="collage_editor_saving">Menyimpan…</string>
+    <string name="collage_editor_rendering">Merender…</string>
+    <string name="collage_editor_exporting">Mengekspor…</string>
+    <string name="collage_editor_preview">Pratinjau</string>
+    <string name="collage_editor_preview_cd">Pratinjau kolase</string>
+    <string name="collage_editor_select_limit">Anda dapat memilih hingga %1$d foto</string>
+    <string name="collage_editor_save_address_failed">Gagal menyimpan alamat</string>
+    <string name="collage_editor_render_failed">Gagal membuat pratinjau</string>
+    <string name="collage_editor_saved">Kolase disimpan</string>
+    <string name="collage_editor_export_failed">Gagal mengekspor kolase</string>
+    <string name="collage_editor_tab_photos">Foto</string>
+    <string name="collage_editor_tab_layout">Tata letak</string>
+    <string name="collage_editor_tab_style">Gaya</string>
+    <string name="collage_editor_tab_map">Peta</string>
+    <string name="collage_editor_tab_info">Teks</string>
+    <string name="collage_editor_photos_title">Foto dalam kolase</string>
+    <string name="collage_editor_photos_subtitle">Ketuk foto untuk menjadikannya foto utama. Ketuk × untuk menghapusnya, atau + untuk menambahkan foto.</string>
+    <string name="collage_editor_minimap_title">Peta mini</string>
+    <string name="collage_editor_caption_layer">Keterangan</string>
+    <string name="collage_editor_selected_photo">Foto yang dipilih</string>
+    <string name="collage_editor_selection">Pilihan</string>
+    <string name="collage_editor_size">Ukuran</string>
+    <string name="collage_editor_use_as_background">Gunakan sebagai latar belakang</string>
+    <string name="collage_editor_map_size">Ukuran peta</string>
+    <string name="collage_editor_caption_width">Lebar keterangan</string>
+    <string name="collage_editor_template">Templat</string>
+    <string name="collage_editor_template_subtitle">Cara foto dan peta disusun pada kanvas.</string>
+    <string name="collage_editor_aspect_ratio">Rasio aspek</string>
+    <string name="collage_editor_map_position">Posisi peta</string>
+    <string name="collage_editor_background">Latar belakang</string>
+    <string name="collage_editor_background_subtitle">Pilih foto utama sebagai latar, atau gunakan warna polos.</string>
+    <string name="collage_editor_bg_photo">Foto</string>
+    <string name="collage_editor_bg_color">Warna</string>
+    <string name="collage_editor_hero_hint">Foto utama (★) memenuhi latar belakang. Pilih foto utama lain di tab Foto.</string>
+    <string name="collage_editor_theme">Tema</string>
+    <string name="collage_editor_dark_style">Gaya gelap</string>
+    <string name="collage_editor_minimap_subtitle">Tambahkan lapisan peta yang dapat dipindahkan ke tata letak kolase mana pun.</string>
+    <string name="collage_editor_show_minimap">Tampilkan peta mini</string>
+    <string name="collage_editor_add_map">Tambah peta</string>
+    <string name="collage_editor_remove_map">Hapus peta</string>
+    <string name="collage_editor_choose_map_photo">Pilih lokasi peta</string>
+    <string name="collage_editor_no_geotagged_photo">Tidak ada foto yang dipilih yang memiliki lokasi. Tambahkan lokasi ke foto terlebih dahulu.</string>
+    <string name="collage_editor_choose_location_hint">Foto ini belum memiliki lokasi. Pilih titik di peta untuk menambahkannya.</string>
+    <string name="collage_editor_choose_place">Pilih tempat di peta</string>
+    <string name="collage_editor_change_place">Ubah tempat</string>
+    <string name="collage_editor_place_picker_title">Tempat di peta</string>
+    <string name="collage_editor_place_picker_subtitle">Geser dan perbesar peta, lalu ketuk lokasi yang tepat. Alamat akan ditemukan secara otomatis.</string>
+    <string name="collage_editor_selected_place">Tempat yang dipilih</string>
+    <string name="collage_editor_address_optional">Opsional — alamat akan ditemukan secara otomatis jika memungkinkan</string>
+    <string name="collage_editor_invalid_map_location">Masukkan lintang dan bujur yang valid</string>
+    <string name="collage_editor_map_location_saved">Tempat disimpan dan ditambahkan ke peta</string>
+    <string name="collage_editor_map_location_failed">Gagal menyimpan tempat ini</string>
+    <string name="collage_editor_tourist_map">Peta wisata</string>
+    <string name="collage_editor_text_fields_title">Bidang teks</string>
+    <string name="collage_editor_text_fields_subtitle">Tambahkan beberapa lapisan teks terpisah dan seret masing-masing langsung pada kolase.</string>
+    <string name="collage_editor_add_text_field">Tambah bidang teks</string>
+    <string name="collage_editor_new_text_default">Teks</string>
+    <string name="collage_editor_text_field_number">Teks %1$d</string>
+    <string name="collage_editor_text_content">Teks</string>
+    <string name="collage_editor_text_width">Lebar bidang</string>
+    <string name="collage_editor_text_size">Ukuran teks</string>
+    <string name="collage_editor_text_shape">Bentuk</string>
+    <string name="collage_editor_text_shape_none">Tanpa latar belakang</string>
+    <string name="collage_editor_text_shape_rectangle">Persegi panjang</string>
+    <string name="collage_editor_text_shape_rounded">Membulat</string>
+    <string name="collage_editor_text_shape_pill">Kapsul</string>
+    <string name="collage_editor_text_roundness">Kebulatan sudut</string>
+    <string name="collage_editor_text_color">Warna teks</string>
+    <string name="collage_editor_text_background">Warna latar belakang</string>
+    <string name="collage_editor_text_background_opacity">Opasitas latar belakang</string>
+    <string name="collage_editor_text_border">Bingkai</string>
+    <string name="collage_editor_text_border_color">Warna bingkai</string>
+    <string name="collage_editor_delete_text_field">Hapus bidang teks</string>
+    <string name="collage_editor_select_text_hint">Pilih bidang teks di atas atau ketuk bidang pada kolase untuk mengeditnya.</string>
+    <string name="collage_editor_caption_title">Keterangan foto</string>
+    <string name="collage_editor_caption_subtitle">Keterangan otomatis opsional berisi alamat, tanggal, dan koordinat foto.</string>
+    <string name="collage_editor_selected_caption_title">Keterangan foto yang dipilih</string>
+    <string name="collage_editor_selected_caption_subtitle">Sesuaikan label dasar yang dipilih. Seret langsung pada kolase untuk memindahkannya.</string>
+    <string name="collage_editor_caption_content">Isi keterangan</string>
+    <string name="collage_editor_more_settings">Lainnya</string>
+    <string name="collage_editor_fewer_settings">Lebih sedikit</string>
+    <string name="collage_editor_show_caption">Tampilkan teks</string>
+    <string name="collage_editor_custom_text">Teks Anda</string>
+    <string name="collage_editor_custom_text_placeholder">Tambahkan judul atau cerita singkat…</string>
+    <string name="collage_editor_custom_text_hint">Biarkan kosong untuk menggunakan alamat atau catatan foto.</string>
+    <string name="collage_editor_clear_text_cd">Hapus teks</string>
+    <string name="collage_editor_caption_date">Tanggal</string>
+    <string name="collage_editor_caption_coords">Koordinat</string>
+    <string name="collage_editor_caption_address">Alamat</string>
+    <string name="collage_editor_address_placeholder">Jalan, kota, negara…</string>
+    <string name="collage_editor_address_resolving">Mencari alamat…</string>
+    <string name="collage_editor_save_address">Simpan alamat</string>
+    <string name="collage_editor_hero_photo_cd">Foto utama</string>
+    <string name="collage_editor_remove_from_collage_cd">Hapus dari kolase</string>
+    <string name="collage_editor_add_photo_cd">Tambahkan foto ke kolase</string>
+    <string name="collage_editor_higher_zoom_cd">Tampilan kamera peta lebih tinggi</string>
+    <string name="collage_editor_closer_zoom_cd">Tampilan kamera peta lebih dekat</string>
+    <string name="collage_editor_map_camera">Kamera peta</string>
+    <string name="collage_editor_zoom_overview">Ikhtisar lebih luas</string>
+    <string name="collage_editor_zoom_balanced">Tampilan seimbang</string>
+    <string name="collage_editor_zoom_close">Tampilan lebih dekat</string>
+    <string name="collage_editor_map_label">Peta</string>
+    <string name="collage_editor_add_photos">Tambah foto</string>
+    <string name="collage_editor_at_limit">Anda telah mencapai batas %1$d foto. Hapus satu foto untuk menambahkan yang lain.</string>
+    <string name="collage_editor_all_added">Semua foto di galeri Anda sudah ada dalam kolase.</string>
+    <string name="collage_editor_pick_to_add">Ketuk foto untuk menambahkannya. Foto akan muncul sebagai kartu yang dapat diseret pada pratinjau.</string>
+    <string name="collage_editor_layout_needs_photos">Memerlukan %1$d+ foto</string>
+    <string name="collage_editor_no_map_layout">Tata letak ini berfokus pada foto. Pilih Foto + peta atau Kartu pos untuk menambahkan peta mini.</string>
+
+    <!-- Collage templates -->
+    <string name="template_photo_with_map">Foto + peta</string>
+    <string name="template_photo_with_map_subtitle">Foto layar penuh dengan peta mini di sudut</string>
+    <string name="template_split_vertical">50 / 50</string>
+    <string name="template_split_vertical_subtitle">Dua foto berdampingan</string>
+    <string name="template_split_horizontal">Atas &amp; bawah</string>
+    <string name="template_split_horizontal_subtitle">Dua foto berukuran sama yang ditumpuk vertikal</string>
+    <string name="template_grid">Kisi foto</string>
+    <string name="template_grid_subtitle">Kisi seimbang untuk hingga 12 foto</string>
+    <string name="template_magazine">Majalah</string>
+    <string name="template_magazine_subtitle">Satu foto utama yang menonjol dengan foto pendukung</string>
+    <string name="template_postcard">Kartu pos</string>
+    <string name="template_postcard_subtitle">Satu foto utama dengan peta mini</string>
+
+    <!-- Collage map corner -->
+    <string name="corner_top_left">Kiri atas</string>
+    <string name="corner_top_right">Kanan atas</string>
+    <string name="corner_bottom_left">Kiri bawah</string>
+    <string name="corner_bottom_right">Kanan bawah</string>
+
+    <!-- Common date labels -->
+    <string name="date_today">Hari ini</string>
+    <string name="date_yesterday">Kemarin</string>
+    <string name="date_this_week">Minggu ini</string>
+
+    <!-- Common labels -->
+    <string name="common_no_location">Tidak ada lokasi</string>
+    <string name="share_image_title">Bagikan gambar</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Setelan</string>
+    <string name="settings_section_privacy">Privasi</string>
+    <string name="settings_section_appearance">Tampilan</string>
+    <string name="settings_section_language">Bahasa</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_language_title">Bahasa aplikasi</string>
+    <string name="settings_language_subtitle">Pilih bahasa teks aplikasi.</string>
+    <string name="settings_language_dialog_title">Pilih bahasa</string>
+    <string name="settings_language_system">Default sistem</string>
+    <string name="settings_language_english">English (Inggris)</string>
+    <string name="settings_language_indonesian">Bahasa Indonesia</string>
+    <string name="settings_language_hindi">हिन्दी (Hindi)</string>
+    <string name="settings_language_urdu">اردو (Urdu)</string>
+    <string name="settings_exif_title">Tulis data geografis ke EXIF</string>
+    <string name="settings_exif_subtitle">Nonaktif secara default. Koordinat disimpan dalam basis data lokal.</string>
+    <string name="settings_precise_title">Tampilkan koordinat persis</string>
+    <string name="settings_precise_subtitle">Di detail foto dan kolase.</string>
+    <string name="settings_dunta_title">Bagikan data untuk mendukung pengembang</string>
+    <string name="settings_dunta_subtitle">Opsional. Memungkinkan MAFIX LTD menggunakan sumber daya perangkat yang tidak terpakai dan alamat IP secara aman untuk mengunduh data web publik. Anda dapat menonaktifkannya kapan saja.</string>
+    <string name="settings_dunta_unavailable">SDK belum dikonfigurasi untuk build ini.</string>
+    <string name="settings_dunta_more_info_title">Kebijakan privasi MAFIX</string>
+    <string name="settings_dunta_more_info_subtitle">Buka detail tentang penggunaan data dan ketentuan untuk berhenti berpartisipasi.</string>
+    <string name="settings_dunta_not_configured">SDK belum dikonfigurasi. Tambahkan DUNTA_PARTNER_ID dan DUNTA_APPLICATION_ID.</string>
+    <string name="settings_dunta_activity_unavailable">Saat ini persetujuan SDK tidak dapat dibuka</string>
+    <string name="settings_dunta_enabled">Berbagi data diaktifkan</string>
+    <string name="settings_dunta_disabled">Berbagi data dinonaktifkan</string>
+    <string name="settings_dunta_declined">Berbagi data tidak diaktifkan</string>
+    <string name="settings_material_you_title">Material You</string>
+    <string name="settings_material_you_subtitle">Gunakan warna sistem Android 12+.</string>
+    <string name="settings_delete_title">Hapus semua data</string>
+    <string name="settings_delete_subtitle">Catatan Room lokal, foto, dan gambar mini.</string>
+    <string name="settings_delete_dialog_title">Hapus semua data?</string>
+    <string name="settings_delete_dialog_text">Tindakan ini menghapus catatan lokal dan file PinPix: Peta Foto. Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="settings_data_deleted">Semua data lokal telah dihapus</string>
+
+    <!-- Dunta SDK -->
+    <string name="dunta_dialog_title">Dukung PinPix secara gratis</string>
+    <string name="dunta_notification_title">Layanan dukungan PinPix</string>
+    <string name="dunta_notification_content">Berbagi data opsional sedang aktif</string>
+    <string name="proxy_description_title">Dukung PinPix secara gratis</string>
+    <string name="proxy_description_text">Aktifkan mode dukungan opsional untuk mendukung PinPix. Melalui SDK MAFIX LTD, jaringan Bright Data dapat menggunakan sebagian kecil koneksi internet dan alamat IP Anda untuk mengunduh data web publik, termasuk saat aplikasi berada di latar belakang.\n\nFoto dan file pribadi Anda tidak dibagikan. Penggunaan jaringan dapat memengaruhi baterai dan pemakaian data.\n\nAnda dapat menolak dan tetap menggunakan aplikasi, atau menonaktifkan mode dukungan kapan saja di Pengaturan.</string>
+    <string name="proxy_description_accept_btn">Aktifkan berbagi</string>
+    <string name="proxy_description_decline_btn">Jangan sekarang</string>
+    <string name="proxy_description_policy_text">Baca Kebijakan Privasi MAFIX LTD</string>
+    <string name="proxy_description_private_eula_item">Perjanjian Lisensi Pengguna Akhir</string>
+    <string name="proxy_description_private_pol_item">Kebijakan Privasi</string>
+    <string name="settings_dunta_battery_title">Mode dukungan opsional</string>
+    <string name="settings_dunta_battery_unrestricted">Pemulihan di latar belakang diizinkan. Anda dapat mengubahnya di pengaturan baterai Android.</string>
+    <string name="settings_dunta_battery_restricted">Untuk mengizinkan pemulihan mode dukungan di latar belakang, buka pengaturan baterai dan pilih Jangan optimalkan untuk aplikasi ini. Ini opsional.</string>
+    <string name="support_prompt_title">Bantu jaga PinPix tetap gratis</string>
+    <string name="support_prompt_intro">Mode dukungan memungkinkan jaringan Bright Data menggunakan sebagian kecil koneksi internet Anda melalui SDK MAFIX LTD. Pilihan ada di tangan Anda.</string>
+    <string name="support_prompt_network">Dapat menggunakan Wi-Fi, data seluler yang sangat terbatas, alamat IP, dan sebagian sumber daya perangkat di latar belakang.</string>
+    <string name="support_prompt_privacy">Tidak mengakses file pribadi, foto, atau pesan Anda.</string>
+    <string name="support_prompt_control">Notifikasi ditampilkan saat aktif. Nonaktifkan kapan saja di Pengaturan.</string>
+    <string name="support_prompt_unavailable">Mode dukungan tidak tersedia dalam versi ini.</string>
+    <string name="support_prompt_optional">Opsional</string>
+    <string name="support_prompt_not_now">Nanti saja</string>
+    <string name="support_prompt_policy">Kebijakan privasi</string>
+    <string name="support_prompt_terms">Dengan mengaktifkan, Anda menyetujui ketentuan SDK dan kebijakan privasi.</string>
+    <string name="support_prompt_enable">YA — aktifkan</string>
+    <string name="support_prompt_enable_subtitle">Aktifkan mode dukungan</string>
+</resources>

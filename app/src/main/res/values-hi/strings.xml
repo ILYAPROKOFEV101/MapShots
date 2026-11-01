@@ -1,0 +1,326 @@
+<resources>
+    <string name="app_name">PinPix: फोटो मैप</string>
+
+    <!-- Common actions -->
+    <string name="action_cancel">रद्द करें</string>
+    <string name="action_save">सहेजें</string>
+    <string name="action_delete">हटाएँ</string>
+    <string name="action_done">हो गया</string>
+    <string name="action_back">वापस</string>
+    <string name="action_close">बंद करें</string>
+    <string name="action_continue">जारी रखें</string>
+    <string name="action_open">खोलें</string>
+    <string name="action_share">साझा करें</string>
+    <string name="action_clear">साफ़ करें</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_map">नक्शा</string>
+    <string name="nav_camera">कैमरा</string>
+    <string name="nav_gallery">गैलरी</string>
+    <string name="nav_collage">कोलाज</string>
+    <string name="nav_settings">सेटिंग्स</string>
+
+    <!-- Map screen -->
+    <string name="map_capture">कैप्चर</string>
+    <string name="map_empty_title">नक्शा अभी खाली है</string>
+    <string name="map_empty_subtitle">अपनी पहली फ़ोटो लें और वह यहाँ एक सुंदर पिन के रूप में दिखाई देगी।</string>
+    <string name="map_empty_button">फ़ोटो लें</string>
+    <string name="map_no_api_title">Google Maps API key कॉन्फ़िगर नहीं है</string>
+    <string name="map_no_api_subtitle">local.properties में MAPS_API_KEY जोड़ें और ऐप को पुनः आरंभ करें।</string>
+    <string name="map_settings_cd">सेटिंग्स</string>
+    <string name="map_clear_cd">साफ़ करें</string>
+    <string name="map_create_collage">कोलाज बनाएँ</string>
+    <string name="photo_count">%1$d फ़ोटो</string>
+    <string name="map_photo_deleted">फ़ोटो हटा दी गई</string>
+
+    <!-- Filters -->
+    <string name="filter_all">सभी</string>
+    <string name="filter_today">आज</string>
+    <string name="filter_week">इस सप्ताह</string>
+    <string name="filter_favorites">पसंदीदा</string>
+    <string name="filter_with_notes">नोट्स के साथ</string>
+    <string name="filter_no_location">बिना स्थान</string>
+    <string name="filter_with_location">स्थान के साथ</string>
+
+    <!-- Camera -->
+    <string name="camera_permission_title">कैमरा की अनुमति आवश्यक है</string>
+    <string name="camera_permission_subtitle">सीधे ऐप में फ़ोटो लेने के लिए।</string>
+    <string name="camera_permission_button">कैमरा अनुमति दें</string>
+    <string name="camera_close_cd">बंद करें</string>
+    <string name="camera_flash_cd">फ़्लैश</string>
+    <string name="camera_grid_cd">ग्रिड टॉगल करें</string>
+    <string name="camera_flip_cd">कैमरा बदलें</string>
+    <string name="camera_capture_failed">फ़ोटो लेने में विफल</string>
+    <string name="camera_save_failed">फ़ोटो सहेजने में विफल</string>
+    <string name="location_searching">स्थान खोजा जा रहा है…</string>
+    <string name="location_ready">स्थान तैयार</string>
+    <string name="location_approximate">अनुमानित स्थान</string>
+    <string name="location_none">कोई स्थान नहीं</string>
+
+    <!-- Gallery -->
+    <string name="gallery_title">गैलरी</string>
+    <string name="gallery_import_cd">फ़ोटो आयात करें</string>
+    <string name="gallery_open_camera_cd">कैमरा खोलें</string>
+    <string name="gallery_collage">कोलाज</string>
+    <string name="gallery_empty_title">अपनी पहली फ़ोटो लें</string>
+    <string name="gallery_empty_subtitle">कैप्चर के तुरंत बाद फ़ोटो गैलरी और नक्शे में दिखाई देंगी।</string>
+    <string name="gallery_empty_button">कैमरा खोलें</string>
+    <string name="gallery_import_failed">फ़ोटो आयात करने में विफल</string>
+    <string name="photo_selected_cd">चुना गया</string>
+
+    <!-- Photo detail -->
+    <string name="photo_detail_default_title">फ़ोटो</string>
+    <string name="photo_detail_favorite_cd">पसंदीदा</string>
+    <string name="photo_detail_not_found_title">फ़ोटो नहीं मिली</string>
+    <string name="photo_detail_not_found_subtitle">शायद इसे पहले ही हटा दिया गया है।</string>
+    <string name="photo_detail_note_dialog_title">नोट</string>
+    <string name="photo_detail_delete_dialog_title">फ़ोटो हटाएँ?</string>
+    <string name="photo_detail_delete_dialog_text">रिकॉर्ड और स्थानीय फ़ाइलें स्थायी रूप से हटा दी जाएँगी।</string>
+    <string name="photo_detail_location_title">फ़ोटो का स्थान</string>
+    <string name="photo_detail_location_subtitle">बिंदु चुनने के लिए नक्शे पर टैप करें। यह स्क्रीन Google Maps शैली के पिकर की तरह काम करती है।</string>
+    <string name="photo_detail_location_no_map">नक्शा उपलब्ध नहीं: MAPS_API_KEY जोड़ें। आप निर्देशांक मैन्युअल रूप से दर्ज कर सकते हैं।</string>
+    <string name="photo_detail_latitude_label">अक्षांश (lat)</string>
+    <string name="photo_detail_longitude_label">देशांतर (lng)</string>
+    <string name="photo_detail_address_label">पता कैप्शन (वैकल्पिक)</string>
+    <string name="photo_detail_picker_marker_title">चुना गया बिंदु</string>
+    <string name="photo_detail_picker_no_point">कोई बिंदु नहीं चुना गया</string>
+    <string name="photo_detail_remove_location">जियोटैग हटाएँ</string>
+    <string name="photo_detail_invalid_coordinates">सही निर्देशांक दर्ज करें</string>
+    <string name="photo_detail_coordinates_out_of_range">निर्देशांक अनुमत सीमा से बाहर हैं</string>
+    <string name="photo_detail_location_saved">स्थान सहेजा गया</string>
+    <string name="photo_detail_location_removed">स्थान हटा दिया गया</string>
+    <string name="photo_detail_add_note">नोट जोड़ें</string>
+    <string name="photo_detail_edit_note">नोट संपादित करें</string>
+    <string name="photo_detail_set_location">स्थान सेट करें</string>
+    <string name="photo_detail_edit_location">स्थान संपादित करें</string>
+    <string name="photo_detail_no_location">कोई स्थान नहीं</string>
+    <string name="photo_detail_location_saved_label">स्थान सहेजा गया</string>
+    <string name="photo_detail_accuracy">सटीकता %1$d मी</string>
+    <string name="photo_detail_collage">कोलाज</string>
+    <string name="photo_detail_share">साझा करें</string>
+    <string name="photo_detail_map">नक्शा</string>
+    <string name="photo_detail_delete">हटाएँ</string>
+
+    <!-- Photo bottom sheet -->
+    <string name="photo_sheet_open">खोलें</string>
+    <string name="photo_sheet_collage">कोलाज</string>
+    <string name="photo_sheet_favorite_cd">पसंदीदा</string>
+    <string name="photo_sheet_share_cd">साझा करें</string>
+    <string name="photo_sheet_delete_cd">हटाएँ</string>
+
+    <!-- Collage picker -->
+    <string name="collage_title">कोलाज</string>
+    <string name="collage_template_step_title">कोलाज टेम्पलेट</string>
+    <string name="collage_back_to_photos_cd">फ़ोटो चयन पर वापस जाएँ</string>
+    <string name="collage_clear_selection_cd">चयन साफ़ करें</string>
+    <string name="collage_picker_empty_title">कोलाज के लिए फ़ोटो चुनें</string>
+    <string name="collage_picker_empty_subtitle">आप नक्शे या गैलरी से फ़ोटो चुन सकते हैं।</string>
+    <string name="collage_picker_empty_button">गैलरी खोलें</string>
+    <string name="collage_pick_hint">1–12 फ़ोटो चुनें</string>
+    <string name="collage_pick_progress">12 में से %1$d चुनी गईं · और जोड़ी जा सकती हैं</string>
+    <string name="collage_template_ready">%1$d फ़ोटो कोलाज के लिए तैयार</string>
+    <string name="collage_template_pick_subtitle">अपनी फ़ोटो के लिए सही लेआउट चुनें। एडिटर में फ़ॉर्मैट और स्टाइल बदल सकते हैं।</string>
+    <string name="collage_template_photo_requirement">%1$d+ फ़ोटो</string>
+    <string name="collage_template_more_photos_needed">कम से कम %1$d फ़ोटो चुनें</string>
+
+    <!-- Collage editor -->
+    <string name="collage_editor_export">निर्यात करें</string>
+    <string name="collage_editor_saving">सहेज रहा है…</string>
+    <string name="collage_editor_rendering">रेंडर हो रहा है…</string>
+    <string name="collage_editor_exporting">निर्यात हो रहा है…</string>
+    <string name="collage_editor_preview">पूर्वावलोकन</string>
+    <string name="collage_editor_preview_cd">कोलाज पूर्वावलोकन</string>
+    <string name="collage_editor_select_limit">आप अधिकतम %1$d फ़ोटो चुन सकते हैं</string>
+    <string name="collage_editor_save_address_failed">पता सहेजने में विफल</string>
+    <string name="collage_editor_render_failed">पूर्वावलोकन बनाने में विफल</string>
+    <string name="collage_editor_saved">कोलाज सहेजा गया</string>
+    <string name="collage_editor_export_failed">कोलाज निर्यात करने में विफल</string>
+    <string name="collage_editor_tab_photos">फ़ोटो</string>
+    <string name="collage_editor_tab_layout">लेआउट</string>
+    <string name="collage_editor_tab_style">शैली</string>
+    <string name="collage_editor_tab_map">नक्शा</string>
+    <string name="collage_editor_tab_info">टेक्स्ट</string>
+    <string name="collage_editor_photos_title">कोलाज में फ़ोटो</string>
+    <string name="collage_editor_photos_subtitle">किसी फ़ोटो को मुख्य बनाने के लिए उस पर टैप करें। हटाने के लिए × और जोड़ने के लिए + दबाएँ।</string>
+    <string name="collage_editor_minimap_title">मिनी-नक्शा</string>
+    <string name="collage_editor_caption_layer">कैप्शन</string>
+    <string name="collage_editor_selected_photo">चुनी गई फ़ोटो</string>
+    <string name="collage_editor_selection">चयन</string>
+    <string name="collage_editor_size">आकार</string>
+    <string name="collage_editor_use_as_background">पृष्ठभूमि के रूप में उपयोग करें</string>
+    <string name="collage_editor_map_size">नक्शा आकार</string>
+    <string name="collage_editor_caption_width">कैप्शन चौड़ाई</string>
+    <string name="collage_editor_template">टेम्पलेट</string>
+    <string name="collage_editor_template_subtitle">कैनवास पर फ़ोटो और नक्शा कैसे व्यवस्थित होंगे।</string>
+    <string name="collage_editor_aspect_ratio">पहलू अनुपात</string>
+    <string name="collage_editor_map_position">नक्शा स्थान</string>
+    <string name="collage_editor_background">पृष्ठभूमि</string>
+    <string name="collage_editor_background_subtitle">मुख्य फ़ोटो को पृष्ठभूमि के रूप में चुनें या एक ठोस रंग चुनें।</string>
+    <string name="collage_editor_bg_photo">फ़ोटो</string>
+    <string name="collage_editor_bg_color">रंग</string>
+    <string name="collage_editor_hero_hint">मुख्य फ़ोटो (★) पृष्ठभूमि भरती है। फ़ोटो टैब से अलग मुख्य चुनें।</string>
+    <string name="collage_editor_theme">थीम</string>
+    <string name="collage_editor_dark_style">डार्क शैली</string>
+    <string name="collage_editor_minimap_subtitle">किसी भी कोलाज लेआउट में चलायमान नक्शा जोड़ें।</string>
+    <string name="collage_editor_show_minimap">मिनी-नक्शा दिखाएँ</string>
+    <string name="collage_editor_add_map">नक्शा जोड़ें</string>
+    <string name="collage_editor_remove_map">नक्शा हटाएँ</string>
+    <string name="collage_editor_choose_map_photo">नक्शे का स्थान चुनें</string>
+    <string name="collage_editor_no_geotagged_photo">चुनी गई किसी फ़ोटो में स्थान नहीं है। पहले किसी फ़ोटो में स्थान जोड़ें।</string>
+    <string name="collage_editor_tourist_map">पर्यटक नक्शा</string>
+    <string name="collage_editor_caption_title">कैप्शन</string>
+    <string name="collage_editor_caption_subtitle">अपना टेक्स्ट जोड़ें या कैप्शन पूरी तरह छिपाएँ।</string>
+    <string name="collage_editor_show_caption">टेक्स्ट दिखाएँ</string>
+    <string name="collage_editor_custom_text">आपका टेक्स्ट</string>
+    <string name="collage_editor_custom_text_placeholder">शीर्षक या छोटी कहानी जोड़ें…</string>
+    <string name="collage_editor_custom_text_hint">फ़ोटो का पता या नोट उपयोग करने के लिए खाली छोड़ें।</string>
+    <string name="collage_editor_clear_text_cd">टेक्स्ट मिटाएँ</string>
+    <string name="collage_editor_caption_date">तारीख</string>
+    <string name="collage_editor_caption_coords">निर्देशांक</string>
+    <string name="collage_editor_caption_address">पता</string>
+    <string name="collage_editor_address_placeholder">सड़क, शहर, देश…</string>
+    <string name="collage_editor_address_resolving">पता खोजा जा रहा है…</string>
+    <string name="collage_editor_save_address">पता सहेजें</string>
+    <string name="collage_editor_hero_photo_cd">मुख्य फ़ोटो</string>
+    <string name="collage_editor_remove_from_collage_cd">कोलाज से हटाएँ</string>
+    <string name="collage_editor_add_photo_cd">कोलाज में फ़ोटो जोड़ें</string>
+    <string name="collage_editor_higher_zoom_cd">ऊँचा नक्शा कैमरा</string>
+    <string name="collage_editor_closer_zoom_cd">निकट नक्शा कैमरा</string>
+    <string name="collage_editor_map_camera">नक्शा कैमरा</string>
+    <string name="collage_editor_zoom_overview">ऊँचा अवलोकन</string>
+    <string name="collage_editor_zoom_balanced">संतुलित दृश्य</string>
+    <string name="collage_editor_zoom_close">निकट दृश्य</string>
+    <string name="collage_editor_map_label">नक्शा</string>
+    <string name="collage_editor_add_photos">फ़ोटो जोड़ें</string>
+    <string name="collage_editor_at_limit">आप %1$d-फ़ोटो की सीमा तक पहुँच गए हैं। और जोड़ने के लिए एक हटाएँ।</string>
+    <string name="collage_editor_all_added">आपकी लाइब्रेरी की सभी फ़ोटो पहले से कोलाज में हैं।</string>
+    <string name="collage_editor_pick_to_add">फ़ोटो जोड़ने के लिए टैप करें। यह पूर्वावलोकन पर खींचने योग्य कार्ड के रूप में दिखाई देगी।</string>
+    <string name="collage_editor_layout_needs_photos">%1$d+ फ़ोटो चाहिए</string>
+    <string name="collage_editor_no_map_layout">यह लेआउट फ़ोटो पर केंद्रित है। मिनी-मैप के लिए फ़ोटो + नक्शा या पोस्टकार्ड चुनें।</string>
+
+    <!-- Collage templates -->
+    <string name="template_photo_with_map">फ़ोटो + नक्शा</string>
+    <string name="template_photo_with_map_subtitle">कोने में मिनी नक्शे के साथ पूर्ण फ़ोटो</string>
+    <string name="template_split_vertical">50 / 50</string>
+    <string name="template_split_vertical_subtitle">दो फ़ोटो साथ-साथ</string>
+    <string name="template_split_horizontal">ऊपर और नीचे</string>
+    <string name="template_split_horizontal_subtitle">दो बराबर फ़ोटो लंबवत</string>
+    <string name="template_grid">फ़ोटो ग्रिड</string>
+    <string name="template_grid_subtitle">12 फ़ोटो तक का संतुलित ग्रिड</string>
+    <string name="template_magazine">मैगज़ीन</string>
+    <string name="template_magazine_subtitle">एक बड़ी मुख्य फ़ोटो और सहायक फ़ोटो</string>
+    <string name="template_postcard">पोस्टकार्ड</string>
+    <string name="template_postcard_subtitle">मिनी नक्शे के साथ एक मुख्य फ़ोटो</string>
+
+    <!-- Collage map corner -->
+    <string name="corner_top_left">ऊपर बाएँ</string>
+    <string name="corner_top_right">ऊपर दाएँ</string>
+    <string name="corner_bottom_left">नीचे बाएँ</string>
+    <string name="corner_bottom_right">नीचे दाएँ</string>
+
+    <!-- Common date labels -->
+    <string name="date_today">आज</string>
+    <string name="date_yesterday">कल</string>
+    <string name="date_this_week">इस सप्ताह</string>
+
+    <!-- Common labels -->
+    <string name="common_no_location">कोई स्थान नहीं</string>
+    <string name="share_image_title">चित्र साझा करें</string>
+
+    <!-- Settings -->
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="settings_section_privacy">गोपनीयता</string>
+    <string name="settings_section_appearance">दिखावट</string>
+    <string name="settings_section_language">भाषा</string>
+    <string name="settings_section_data">डेटा</string>
+    <string name="settings_language_title">ऐप की भाषा</string>
+    <string name="settings_language_subtitle">चुनें कि ऐप का पाठ कैसे दिखाई दे।</string>
+    <string name="settings_language_dialog_title">भाषा चुनें</string>
+    <string name="settings_language_system">सिस्टम डिफ़ॉल्ट</string>
+    <string name="settings_language_english">English (अंग्रेज़ी)</string>
+    <string name="settings_language_hindi">हिन्दी</string>
+    <string name="settings_language_urdu">اردو (उर्दू)</string>
+    <string name="settings_exif_title">EXIF में जियो डेटा लिखें</string>
+    <string name="settings_exif_subtitle">डिफ़ॉल्ट रूप से बंद। निर्देशांक स्थानीय डेटाबेस में सहेजे जाते हैं।</string>
+    <string name="settings_precise_title">सटीक निर्देशांक दिखाएँ</string>
+    <string name="settings_precise_subtitle">फ़ोटो विवरण और कोलाज में।</string>
+    <string name="settings_material_you_title">Material You</string>
+    <string name="settings_material_you_subtitle">Android 12+ के सिस्टम रंगों का उपयोग करें।</string>
+    <string name="settings_delete_title">सभी डेटा हटाएँ</string>
+    <string name="settings_delete_subtitle">स्थानीय Room रिकॉर्ड, फ़ोटो और थंबनेल।</string>
+    <string name="settings_delete_dialog_title">सभी डेटा हटाएँ?</string>
+    <string name="settings_delete_dialog_text">यह स्थानीय रिकॉर्ड और PinPix: फोटो मैप फ़ाइलों को हटाएगा। इस क्रिया को पूर्ववत नहीं किया जा सकता।</string>
+    <string name="settings_data_deleted">सभी स्थानीय डेटा हटा दिया गया</string>
+    <string name="settings_dunta_battery_title">वैकल्पिक सहायता मोड</string>
+    <string name="settings_dunta_battery_unrestricted">बैकग्राउंड में दोबारा शुरू करने की अनुमति है। आप इसे Android की बैटरी सेटिंग में बदल सकते हैं।</string>
+    <string name="settings_dunta_battery_restricted">सहायता मोड को बैकग्राउंड में दोबारा शुरू करने के लिए बैटरी सेटिंग खोलें और इस ऐप के लिए ऑप्टिमाइज़ न करें चुनें। यह वैकल्पिक है।</string>
+    <string name="collage_editor_choose_location_hint">कोलाज को मानचित्र पर दिखाने के लिए स्थान चुनें।</string>
+    <string name="collage_editor_choose_place">स्थान चुनें</string>
+    <string name="collage_editor_change_place">स्थान बदलें</string>
+    <string name="collage_editor_place_picker_title">कोलाज का स्थान</string>
+    <string name="collage_editor_place_picker_subtitle">मानचित्र पर टैप करें या निर्देशांक दर्ज करें।</string>
+    <string name="collage_editor_selected_place">चुना गया स्थान</string>
+    <string name="collage_editor_address_optional">पता वैकल्पिक है। उपलब्ध होने पर अपने आप खोजा जाएगा।</string>
+    <string name="collage_editor_invalid_map_location">सही अक्षांश और देशांतर दर्ज करें</string>
+    <string name="collage_editor_map_location_saved">स्थान सहेजा गया और मानचित्र में जोड़ा गया</string>
+    <string name="collage_editor_map_location_failed">स्थान सहेजा नहीं जा सका</string>
+    <string name="collage_editor_text_fields_title">टेक्स्ट फ़ील्ड</string>
+    <string name="collage_editor_text_fields_subtitle">अलग-अलग टेक्स्ट जोड़ें और हर एक को कोलाज पर खींचकर रखें।</string>
+    <string name="collage_editor_add_text_field">टेक्स्ट फ़ील्ड जोड़ें</string>
+    <string name="collage_editor_new_text_default">टेक्स्ट</string>
+    <string name="collage_editor_text_field_number">टेक्स्ट %1$d</string>
+    <string name="collage_editor_text_content">टेक्स्ट</string>
+    <string name="collage_editor_text_width">फ़ील्ड की चौड़ाई</string>
+    <string name="collage_editor_text_size">टेक्स्ट का आकार</string>
+    <string name="collage_editor_text_shape">आकार</string>
+    <string name="collage_editor_text_shape_none">बिना बैकग्राउंड</string>
+    <string name="collage_editor_text_shape_rectangle">आयत</string>
+    <string name="collage_editor_text_shape_rounded">गोल कोने</string>
+    <string name="collage_editor_text_shape_pill">कैप्सूल</string>
+    <string name="collage_editor_text_roundness">कोनों की गोलाई</string>
+    <string name="collage_editor_text_color">टेक्स्ट का रंग</string>
+    <string name="collage_editor_text_background">बैकग्राउंड का रंग</string>
+    <string name="collage_editor_text_background_opacity">बैकग्राउंड की अपारदर्शिता</string>
+    <string name="collage_editor_text_border">फ़्रेम</string>
+    <string name="collage_editor_text_border_color">फ़्रेम का रंग</string>
+    <string name="collage_editor_delete_text_field">टेक्स्ट फ़ील्ड हटाएँ</string>
+    <string name="collage_editor_select_text_hint">बदलने के लिए ऊपर टेक्स्ट फ़ील्ड चुनें या कोलाज पर उस पर टैप करें।</string>
+    <string name="collage_editor_selected_caption_title">चुनी गई फ़ोटो का कैप्शन</string>
+    <string name="collage_editor_selected_caption_subtitle">चुना गया लेबल बदलें। जगह बदलने के लिए उसे कोलाज पर खींचें।</string>
+    <string name="collage_editor_caption_content">कैप्शन का टेक्स्ट</string>
+    <string name="collage_editor_more_settings">अधिक</string>
+    <string name="collage_editor_fewer_settings">कम</string>
+    <string name="settings_language_indonesian">Bahasa Indonesia (इंडोनेशियाई)</string>
+    <string name="settings_dunta_title">डेवलपर की सहायता के लिए डेटा साझा करें</string>
+    <string name="settings_dunta_subtitle">वैकल्पिक। MAFIX LTD के माध्यम से Bright Data को सार्वजनिक वेब डेटा के लिए इंटरनेट कनेक्शन और IP पते का उपयोग करने देता है। कभी भी बंद कर सकते हैं।</string>
+    <string name="settings_dunta_unavailable">इस संस्करण में सहायता मोड उपलब्ध नहीं है।</string>
+    <string name="settings_dunta_more_info_title">MAFIX की गोपनीयता नीति</string>
+    <string name="settings_dunta_more_info_subtitle">डेटा के उपयोग और बंद करने की शर्तें पढ़ें।</string>
+    <string name="settings_dunta_not_configured">इस संस्करण में सहायता मोड उपलब्ध नहीं है।</string>
+    <string name="settings_dunta_activity_unavailable">अभी सहमति स्क्रीन नहीं खोली जा सकी</string>
+    <string name="settings_dunta_enabled">डेटा साझा करना चालू है</string>
+    <string name="settings_dunta_disabled">डेटा साझा करना बंद है</string>
+    <string name="settings_dunta_declined">डेटा साझा करना चालू नहीं किया गया</string>
+    <string name="dunta_dialog_title">मुफ़्त में PinPix की सहायता करें</string>
+    <string name="dunta_notification_title">PinPix सहायता मोड</string>
+    <string name="dunta_notification_content">सहायता मोड चालू है। सेटिंग में बंद कर सकते हैं।</string>
+    <string name="proxy_description_title">मुफ़्त में PinPix की सहायता करें</string>
+    <string name="proxy_description_accept_btn">साझा करना चालू करें</string>
+    <string name="proxy_description_decline_btn">अभी नहीं</string>
+    <string name="proxy_description_policy_text">MAFIX LTD की गोपनीयता नीति पढ़ें</string>
+    <string name="proxy_description_private_eula_item">अंतिम उपयोगकर्ता लाइसेंस समझौता</string>
+    <string name="proxy_description_private_pol_item">गोपनीयता नीति</string>
+    <string name="proxy_description_text">PinPix की सहायता के लिए वैकल्पिक सहायता मोड चालू करें। MAFIX LTD के SDK के माध्यम से Bright Data नेटवर्क सार्वजनिक वेब डेटा डाउनलोड करने के लिए आपके इंटरनेट कनेक्शन के एक सीमित हिस्से और IP पते का उपयोग कर सकता है, जब ऐप बैकग्राउंड में हो तब भी।\n\nआपकी फ़ोटो और निजी फ़ाइलें साझा नहीं की जाती हैं। नेटवर्क का उपयोग बैटरी और डेटा की खपत को प्रभावित कर सकता है।\n\nआप मना करके भी ऐप का उपयोग कर सकते हैं या सेटिंग में कभी भी सहायता मोड बंद कर सकते हैं।</string>
+    <string name="support_prompt_title">PinPix को मुफ़्त रखने में मदद करें</string>
+    <string name="support_prompt_intro">सहायता मोड MAFIX LTD के SDK के माध्यम से Bright Data नेटवर्क को आपके इंटरनेट कनेक्शन के एक सीमित हिस्से का उपयोग करने देता है। निर्णय आपका है।</string>
+    <string name="support_prompt_network">बैकग्राउंड में Wi-Fi, बहुत सीमित मोबाइल डेटा, आपके IP पते और डिवाइस के कुछ संसाधनों का उपयोग हो सकता है।</string>
+    <string name="support_prompt_privacy">आपकी निजी फ़ाइलों, फ़ोटो या संदेशों तक पहुँच नहीं लेता।</string>
+    <string name="support_prompt_control">चालू होने पर सूचना दिखाई जाती है। सेटिंग में कभी भी बंद करें।</string>
+    <string name="support_prompt_unavailable">इस संस्करण में सहायता मोड उपलब्ध नहीं है।</string>
+    <string name="support_prompt_optional">वैकल्पिक</string>
+    <string name="support_prompt_not_now">अभी नहीं</string>
+    <string name="support_prompt_policy">गोपनीयता नीति</string>
+    <string name="support_prompt_terms">चालू करके आप SDK की शर्तों और गोपनीयता नीति से सहमत होते हैं।</string>
+    <string name="support_prompt_enable">हाँ — चालू करें</string>
+    <string name="support_prompt_enable_subtitle">सहायता मोड चालू करें</string>
+</resources>

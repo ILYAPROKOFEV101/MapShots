@@ -11,11 +11,16 @@ interface GeoPhotoRepository {
     fun observePhoto(id: String): Flow<GeoPhoto?>
     suspend fun getPhoto(id: String): GeoPhoto?
     suspend fun getPhotos(ids: List<String>): List<GeoPhoto>
+    suspend fun saveImportedPhoto(
+        sourceUri: String,
+        location: PhotoLocation?,
+    ): GeoPhoto
     suspend fun saveCapturedPhoto(
         originalFile: File,
         location: PhotoLocation?,
         cameraFacing: String?,
     ): GeoPhoto
+    suspend fun updatePhotoLocation(id: String, location: PhotoLocation?)
     suspend fun toggleFavorite(id: String)
     suspend fun updateNote(id: String, note: String?)
     suspend fun updateAddressText(id: String, addressText: String?)

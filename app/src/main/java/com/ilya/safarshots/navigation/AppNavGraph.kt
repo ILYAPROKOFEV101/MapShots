@@ -19,11 +19,13 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.annotation.StringRes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -33,6 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.ilya.safarshots.R
 import com.ilya.safarshots.feature.camera.CameraScreen
 import com.ilya.safarshots.feature.collage.CollageEditorScreen
 import com.ilya.safarshots.feature.collage.CollagePickerScreen
@@ -59,17 +62,17 @@ object Routes {
 
 private data class MainDestination(
     val route: String,
-    val label: String,
+    @StringRes val labelRes: Int,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
 )
 
 private val mainDestinations = listOf(
-    MainDestination(Routes.MAP, "Map", Icons.Rounded.Map, Icons.Outlined.Map),
-    MainDestination(Routes.CAMERA, "Camera", Icons.Rounded.AddAPhoto, Icons.Outlined.AddAPhoto),
-    MainDestination(Routes.GALLERY, "Gallery", Icons.Rounded.Image, Icons.Outlined.Image),
-    MainDestination(Routes.COLLAGE, "Collage", Icons.Rounded.Collections, Icons.Outlined.Collections),
-    MainDestination(Routes.SETTINGS, "Settings", Icons.Rounded.Settings, Icons.Outlined.Settings),
+    MainDestination(Routes.MAP, R.string.nav_map, Icons.Rounded.Map, Icons.Outlined.Map),
+    MainDestination(Routes.CAMERA, R.string.nav_camera, Icons.Rounded.AddAPhoto, Icons.Outlined.AddAPhoto),
+    MainDestination(Routes.GALLERY, R.string.nav_gallery, Icons.Rounded.Image, Icons.Outlined.Image),
+    MainDestination(Routes.COLLAGE, R.string.nav_collage, Icons.Rounded.Collections, Icons.Outlined.Collections),
+    MainDestination(Routes.SETTINGS, R.string.nav_settings, Icons.Rounded.Settings, Icons.Outlined.Settings),
 )
 
 @Composable
@@ -90,6 +93,7 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
                 ) {
                     mainDestinations.forEach { destination ->
                         val selected = currentDestination.isSelected(destination.route)
+                        val label = stringResource(destination.labelRes)
                         NavigationBarItem(
                             selected = selected,
                             onClick = {
@@ -102,10 +106,10 @@ fun AppNavGraph(modifier: Modifier = Modifier) {
                             icon = {
                                 Icon(
                                     imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
-                                    contentDescription = destination.label,
+                                    contentDescription = label,
                                 )
                             },
-                            label = { Text(destination.label) },
+                            label = { Text(label) },
                             alwaysShowLabel = true,
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,

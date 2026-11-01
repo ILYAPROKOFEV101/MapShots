@@ -1,0 +1,326 @@
+<resources>
+    <string name="app_name">PinPix: فوٹو میپ</string>
+
+    <!-- Common actions -->
+    <string name="action_cancel">منسوخ کریں</string>
+    <string name="action_save">محفوظ کریں</string>
+    <string name="action_delete">حذف کریں</string>
+    <string name="action_done">مکمل</string>
+    <string name="action_back">واپس</string>
+    <string name="action_close">بند کریں</string>
+    <string name="action_continue">جاری رکھیں</string>
+    <string name="action_open">کھولیں</string>
+    <string name="action_share">شیئر کریں</string>
+    <string name="action_clear">صاف کریں</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_map">نقشہ</string>
+    <string name="nav_camera">کیمرہ</string>
+    <string name="nav_gallery">گیلری</string>
+    <string name="nav_collage">کولاج</string>
+    <string name="nav_settings">ترتیبات</string>
+
+    <!-- Map screen -->
+    <string name="map_capture">تصویر لیں</string>
+    <string name="map_empty_title">نقشہ ابھی خالی ہے</string>
+    <string name="map_empty_subtitle">اپنی پہلی تصویر لیں اور یہ یہاں ایک خوبصورت پن کے طور پر ظاہر ہوگی۔</string>
+    <string name="map_empty_button">تصویر لیں</string>
+    <string name="map_no_api_title">Google Maps API key ترتیب نہیں دی گئی</string>
+    <string name="map_no_api_subtitle">local.properties میں MAPS_API_KEY شامل کریں اور ایپ کو دوبارہ شروع کریں۔</string>
+    <string name="map_settings_cd">ترتیبات</string>
+    <string name="map_clear_cd">صاف کریں</string>
+    <string name="map_create_collage">کولاج بنائیں</string>
+    <string name="photo_count">%1$d تصاویر</string>
+    <string name="map_photo_deleted">تصویر حذف ہو گئی</string>
+
+    <!-- Filters -->
+    <string name="filter_all">سب</string>
+    <string name="filter_today">آج</string>
+    <string name="filter_week">اس ہفتے</string>
+    <string name="filter_favorites">پسندیدہ</string>
+    <string name="filter_with_notes">نوٹس کے ساتھ</string>
+    <string name="filter_no_location">مقام کے بغیر</string>
+    <string name="filter_with_location">مقام کے ساتھ</string>
+
+    <!-- Camera -->
+    <string name="camera_permission_title">کیمرے کی اجازت درکار ہے</string>
+    <string name="camera_permission_subtitle">براہ راست ایپ میں تصاویر لینے کے لیے۔</string>
+    <string name="camera_permission_button">کیمرہ کی اجازت دیں</string>
+    <string name="camera_close_cd">بند کریں</string>
+    <string name="camera_flash_cd">فلیش</string>
+    <string name="camera_grid_cd">گرڈ ٹوگل کریں</string>
+    <string name="camera_flip_cd">کیمرہ بدلیں</string>
+    <string name="camera_capture_failed">تصویر لینے میں ناکامی</string>
+    <string name="camera_save_failed">تصویر محفوظ کرنے میں ناکامی</string>
+    <string name="location_searching">مقام تلاش کیا جا رہا ہے…</string>
+    <string name="location_ready">مقام تیار</string>
+    <string name="location_approximate">تقریبی مقام</string>
+    <string name="location_none">کوئی مقام نہیں</string>
+
+    <!-- Gallery -->
+    <string name="gallery_title">گیلری</string>
+    <string name="gallery_import_cd">تصویر درآمد کریں</string>
+    <string name="gallery_open_camera_cd">کیمرہ کھولیں</string>
+    <string name="gallery_collage">کولاج</string>
+    <string name="gallery_empty_title">اپنی پہلی تصویر لیں</string>
+    <string name="gallery_empty_subtitle">تصویر لینے کے فوراً بعد تصاویر گیلری اور نقشے میں ظاہر ہوں گی۔</string>
+    <string name="gallery_empty_button">کیمرہ کھولیں</string>
+    <string name="gallery_import_failed">تصویر درآمد کرنے میں ناکامی</string>
+    <string name="photo_selected_cd">منتخب</string>
+
+    <!-- Photo detail -->
+    <string name="photo_detail_default_title">تصویر</string>
+    <string name="photo_detail_favorite_cd">پسندیدہ</string>
+    <string name="photo_detail_not_found_title">تصویر نہیں ملی</string>
+    <string name="photo_detail_not_found_subtitle">شاید اسے پہلے ہی حذف کر دیا گیا ہے۔</string>
+    <string name="photo_detail_note_dialog_title">نوٹ</string>
+    <string name="photo_detail_delete_dialog_title">تصویر حذف کریں؟</string>
+    <string name="photo_detail_delete_dialog_text">ریکارڈ اور مقامی فائلیں مستقل طور پر حذف کر دی جائیں گی۔</string>
+    <string name="photo_detail_location_title">تصویر کا مقام</string>
+    <string name="photo_detail_location_subtitle">پوائنٹ منتخب کرنے کے لیے نقشے پر ٹیپ کریں۔ یہ اسکرین Google Maps کے انداز کے پکر کی طرح کام کرتی ہے۔</string>
+    <string name="photo_detail_location_no_map">نقشہ دستیاب نہیں: MAPS_API_KEY شامل کریں۔ آپ کوآرڈینیٹس دستی طور پر درج کر سکتے ہیں۔</string>
+    <string name="photo_detail_latitude_label">عرض البلد (lat)</string>
+    <string name="photo_detail_longitude_label">طول البلد (lng)</string>
+    <string name="photo_detail_address_label">پتے کا کیپشن (اختیاری)</string>
+    <string name="photo_detail_picker_marker_title">منتخب پوائنٹ</string>
+    <string name="photo_detail_picker_no_point">کوئی پوائنٹ منتخب نہیں</string>
+    <string name="photo_detail_remove_location">جیو ٹیگ ہٹائیں</string>
+    <string name="photo_detail_invalid_coordinates">درست کوآرڈینیٹس درج کریں</string>
+    <string name="photo_detail_coordinates_out_of_range">کوآرڈینیٹس مجاز حد سے باہر ہیں</string>
+    <string name="photo_detail_location_saved">مقام محفوظ ہو گیا</string>
+    <string name="photo_detail_location_removed">مقام ہٹا دیا گیا</string>
+    <string name="photo_detail_add_note">نوٹ شامل کریں</string>
+    <string name="photo_detail_edit_note">نوٹ ترمیم کریں</string>
+    <string name="photo_detail_set_location">مقام سیٹ کریں</string>
+    <string name="photo_detail_edit_location">مقام ترمیم کریں</string>
+    <string name="photo_detail_no_location">کوئی مقام نہیں</string>
+    <string name="photo_detail_location_saved_label">مقام محفوظ</string>
+    <string name="photo_detail_accuracy">درستگی %1$d میٹر</string>
+    <string name="photo_detail_collage">کولاج</string>
+    <string name="photo_detail_share">شیئر کریں</string>
+    <string name="photo_detail_map">نقشہ</string>
+    <string name="photo_detail_delete">حذف کریں</string>
+
+    <!-- Photo bottom sheet -->
+    <string name="photo_sheet_open">کھولیں</string>
+    <string name="photo_sheet_collage">کولاج</string>
+    <string name="photo_sheet_favorite_cd">پسندیدہ</string>
+    <string name="photo_sheet_share_cd">شیئر کریں</string>
+    <string name="photo_sheet_delete_cd">حذف کریں</string>
+
+    <!-- Collage picker -->
+    <string name="collage_title">کولاج</string>
+    <string name="collage_template_step_title">کولاج ٹیمپلیٹ</string>
+    <string name="collage_back_to_photos_cd">تصویر کے انتخاب پر واپس جائیں</string>
+    <string name="collage_clear_selection_cd">انتخاب صاف کریں</string>
+    <string name="collage_picker_empty_title">کولاج کے لیے تصاویر منتخب کریں</string>
+    <string name="collage_picker_empty_subtitle">آپ نقشے یا گیلری سے تصاویر چن سکتے ہیں۔</string>
+    <string name="collage_picker_empty_button">گیلری کھولیں</string>
+    <string name="collage_pick_hint">1–12 تصاویر منتخب کریں</string>
+    <string name="collage_pick_progress">12 میں سے %1$d منتخب · مزید شامل کر سکتے ہیں</string>
+    <string name="collage_template_ready">%1$d تصاویر کولاج کے لیے تیار</string>
+    <string name="collage_template_pick_subtitle">اپنی تصاویر کے لیے موزوں لے آؤٹ منتخب کریں۔ ایڈیٹر میں فارمیٹ اور انداز تبدیل کر سکتے ہیں۔</string>
+    <string name="collage_template_photo_requirement">%1$d+ تصاویر</string>
+    <string name="collage_template_more_photos_needed">کم از کم %1$d تصاویر منتخب کریں</string>
+
+    <!-- Collage editor -->
+    <string name="collage_editor_export">برآمد کریں</string>
+    <string name="collage_editor_saving">محفوظ کیا جا رہا ہے…</string>
+    <string name="collage_editor_rendering">رینڈر کیا جا رہا ہے…</string>
+    <string name="collage_editor_exporting">برآمد ہو رہا ہے…</string>
+    <string name="collage_editor_preview">پیش منظر</string>
+    <string name="collage_editor_preview_cd">کولاج پیش منظر</string>
+    <string name="collage_editor_select_limit">آپ زیادہ سے زیادہ %1$d تصاویر منتخب کر سکتے ہیں</string>
+    <string name="collage_editor_save_address_failed">پتہ محفوظ کرنے میں ناکامی</string>
+    <string name="collage_editor_render_failed">پیش منظر بنانے میں ناکامی</string>
+    <string name="collage_editor_saved">کولاج محفوظ ہو گیا</string>
+    <string name="collage_editor_export_failed">کولاج برآمد کرنے میں ناکامی</string>
+    <string name="collage_editor_tab_photos">تصاویر</string>
+    <string name="collage_editor_tab_layout">لے آؤٹ</string>
+    <string name="collage_editor_tab_style">انداز</string>
+    <string name="collage_editor_tab_map">نقشہ</string>
+    <string name="collage_editor_tab_info">متن</string>
+    <string name="collage_editor_photos_title">کولاج میں تصاویر</string>
+    <string name="collage_editor_photos_subtitle">کسی تصویر کو ہیرو بنانے کے لیے ٹیپ کریں۔ ہٹانے کے لیے × اور مزید شامل کرنے کے لیے + دبائیں۔</string>
+    <string name="collage_editor_minimap_title">منی-نقشہ</string>
+    <string name="collage_editor_caption_layer">کیپشن</string>
+    <string name="collage_editor_selected_photo">منتخب تصویر</string>
+    <string name="collage_editor_selection">انتخاب</string>
+    <string name="collage_editor_size">سائز</string>
+    <string name="collage_editor_use_as_background">پس منظر کے طور پر استعمال کریں</string>
+    <string name="collage_editor_map_size">نقشہ سائز</string>
+    <string name="collage_editor_caption_width">کیپشن کی چوڑائی</string>
+    <string name="collage_editor_template">ٹیمپلیٹ</string>
+    <string name="collage_editor_template_subtitle">کینوس پر تصاویر اور نقشہ کیسے ترتیب دیے جائیں گے۔</string>
+    <string name="collage_editor_aspect_ratio">پہلو کا تناسب</string>
+    <string name="collage_editor_map_position">نقشہ کا مقام</string>
+    <string name="collage_editor_background">پس منظر</string>
+    <string name="collage_editor_background_subtitle">ہیرو تصویر کو پس منظر کے طور پر منتخب کریں یا ٹھوس رنگ منتخب کریں۔</string>
+    <string name="collage_editor_bg_photo">تصویر</string>
+    <string name="collage_editor_bg_color">رنگ</string>
+    <string name="collage_editor_hero_hint">ہیرو تصویر (★) پس منظر بھرتی ہے۔ تصاویر ٹیب میں مختلف ہیرو منتخب کریں۔</string>
+    <string name="collage_editor_theme">تھیم</string>
+    <string name="collage_editor_dark_style">ڈارک انداز</string>
+    <string name="collage_editor_minimap_subtitle">کسی بھی کولاج لے آؤٹ میں متحرک نقشہ شامل کریں۔</string>
+    <string name="collage_editor_show_minimap">منی-نقشہ دکھائیں</string>
+    <string name="collage_editor_add_map">نقشہ شامل کریں</string>
+    <string name="collage_editor_remove_map">نقشہ ہٹائیں</string>
+    <string name="collage_editor_choose_map_photo">نقشے کا مقام منتخب کریں</string>
+    <string name="collage_editor_no_geotagged_photo">منتخب تصاویر میں کسی کا مقام موجود نہیں۔ پہلے کسی تصویر میں مقام شامل کریں۔</string>
+    <string name="collage_editor_tourist_map">ٹورسٹ نقشہ</string>
+    <string name="collage_editor_caption_title">کیپشن</string>
+    <string name="collage_editor_caption_subtitle">اپنا متن شامل کریں یا کیپشن مکمل طور پر چھپائیں۔</string>
+    <string name="collage_editor_show_caption">متن دکھائیں</string>
+    <string name="collage_editor_custom_text">آپ کا متن</string>
+    <string name="collage_editor_custom_text_placeholder">عنوان یا مختصر کہانی شامل کریں…</string>
+    <string name="collage_editor_custom_text_hint">تصویر کا پتہ یا نوٹ استعمال کرنے کے لیے خالی چھوڑیں۔</string>
+    <string name="collage_editor_clear_text_cd">متن صاف کریں</string>
+    <string name="collage_editor_caption_date">تاریخ</string>
+    <string name="collage_editor_caption_coords">کوآرڈینیٹس</string>
+    <string name="collage_editor_caption_address">پتہ</string>
+    <string name="collage_editor_address_placeholder">گلی، شہر، ملک…</string>
+    <string name="collage_editor_address_resolving">پتہ تلاش کیا جا رہا ہے…</string>
+    <string name="collage_editor_save_address">پتہ محفوظ کریں</string>
+    <string name="collage_editor_hero_photo_cd">ہیرو تصویر</string>
+    <string name="collage_editor_remove_from_collage_cd">کولاج سے ہٹائیں</string>
+    <string name="collage_editor_add_photo_cd">کولاج میں تصویر شامل کریں</string>
+    <string name="collage_editor_higher_zoom_cd">اونچا نقشہ کیمرہ</string>
+    <string name="collage_editor_closer_zoom_cd">قریب نقشہ کیمرہ</string>
+    <string name="collage_editor_map_camera">نقشہ کیمرہ</string>
+    <string name="collage_editor_zoom_overview">اونچا منظر</string>
+    <string name="collage_editor_zoom_balanced">متوازن منظر</string>
+    <string name="collage_editor_zoom_close">قریبی منظر</string>
+    <string name="collage_editor_map_label">نقشہ</string>
+    <string name="collage_editor_add_photos">تصاویر شامل کریں</string>
+    <string name="collage_editor_at_limit">آپ %1$d تصاویر کی حد تک پہنچ گئے ہیں۔ مزید شامل کرنے کے لیے ایک ہٹائیں۔</string>
+    <string name="collage_editor_all_added">آپ کی لائبریری کی تمام تصاویر پہلے ہی کولاج میں ہیں۔</string>
+    <string name="collage_editor_pick_to_add">شامل کرنے کے لیے تصویر پر ٹیپ کریں۔ یہ پیش منظر پر گھسیٹنے کے قابل کارڈ کے طور پر ظاہر ہوگی۔</string>
+    <string name="collage_editor_layout_needs_photos">%1$d+ تصاویر درکار ہیں</string>
+    <string name="collage_editor_no_map_layout">یہ لے آؤٹ تصاویر پر مرکوز ہے۔ منی نقشے کے لیے تصویر + نقشہ یا پوسٹ کارڈ منتخب کریں۔</string>
+
+    <!-- Collage templates -->
+    <string name="template_photo_with_map">تصویر + نقشہ</string>
+    <string name="template_photo_with_map_subtitle">کونے میں منی نقشے کے ساتھ مکمل تصویر</string>
+    <string name="template_split_vertical">50 / 50</string>
+    <string name="template_split_vertical_subtitle">دو تصاویر ساتھ ساتھ</string>
+    <string name="template_split_horizontal">اوپر اور نیچے</string>
+    <string name="template_split_horizontal_subtitle">دو برابر تصاویر عمودی ترتیب میں</string>
+    <string name="template_grid">تصویری گرڈ</string>
+    <string name="template_grid_subtitle">12 تصاویر تک متوازن گرڈ</string>
+    <string name="template_magazine">میگزین</string>
+    <string name="template_magazine_subtitle">ایک نمایاں تصویر اور معاون تصاویر</string>
+    <string name="template_postcard">پوسٹ کارڈ</string>
+    <string name="template_postcard_subtitle">منی نقشے کے ساتھ ایک ہیرو تصویر</string>
+
+    <!-- Collage map corner -->
+    <string name="corner_top_left">اوپر بائیں</string>
+    <string name="corner_top_right">اوپر دائیں</string>
+    <string name="corner_bottom_left">نیچے بائیں</string>
+    <string name="corner_bottom_right">نیچے دائیں</string>
+
+    <!-- Common date labels -->
+    <string name="date_today">آج</string>
+    <string name="date_yesterday">کل</string>
+    <string name="date_this_week">اس ہفتے</string>
+
+    <!-- Common labels -->
+    <string name="common_no_location">کوئی مقام نہیں</string>
+    <string name="share_image_title">تصویر شیئر کریں</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ترتیبات</string>
+    <string name="settings_section_privacy">رازداری</string>
+    <string name="settings_section_appearance">ظاہری شکل</string>
+    <string name="settings_section_language">زبان</string>
+    <string name="settings_section_data">ڈیٹا</string>
+    <string name="settings_language_title">ایپ کی زبان</string>
+    <string name="settings_language_subtitle">منتخب کریں کہ ایپ کا متن کیسے ظاہر ہو۔</string>
+    <string name="settings_language_dialog_title">زبان منتخب کریں</string>
+    <string name="settings_language_system">سسٹم ڈیفالٹ</string>
+    <string name="settings_language_english">English (انگریزی)</string>
+    <string name="settings_language_hindi">हिन्दी (ہندی)</string>
+    <string name="settings_language_urdu">اردو</string>
+    <string name="settings_exif_title">EXIF میں جیو ڈیٹا لکھیں</string>
+    <string name="settings_exif_subtitle">طے شدہ طور پر بند۔ کوآرڈینیٹس مقامی ڈیٹابیس میں محفوظ ہوتے ہیں۔</string>
+    <string name="settings_precise_title">درست کوآرڈینیٹس دکھائیں</string>
+    <string name="settings_precise_subtitle">تصویر کی تفصیلات اور کولاج میں۔</string>
+    <string name="settings_material_you_title">Material You</string>
+    <string name="settings_material_you_subtitle">Android 12+ کے سسٹم رنگ استعمال کریں۔</string>
+    <string name="settings_delete_title">تمام ڈیٹا حذف کریں</string>
+    <string name="settings_delete_subtitle">مقامی Room ریکارڈ، تصاویر اور تھمب نیلز۔</string>
+    <string name="settings_delete_dialog_title">تمام ڈیٹا حذف کریں؟</string>
+    <string name="settings_delete_dialog_text">یہ مقامی ریکارڈز اور PinPix: فوٹو میپ فائلوں کو حذف کر دے گا۔ اس عمل کو واپس نہیں کیا جا سکتا۔</string>
+    <string name="settings_data_deleted">تمام مقامی ڈیٹا حذف ہو گیا</string>
+    <string name="settings_dunta_battery_title">اختیاری سپورٹ موڈ</string>
+    <string name="settings_dunta_battery_unrestricted">پس منظر میں دوبارہ شروع ہونے کی اجازت ہے۔ آپ اسے Android کی بیٹری سیٹنگز میں بدل سکتے ہیں۔</string>
+    <string name="settings_dunta_battery_restricted">سپورٹ موڈ کو پس منظر میں دوبارہ شروع کرنے کے لیے بیٹری سیٹنگز کھولیں اور اس ایپ کے لیے آپٹیمائز نہ کریں منتخب کریں۔ یہ اختیاری ہے۔</string>
+    <string name="collage_editor_choose_location_hint">کولاج کو نقشے پر دکھانے کے لیے جگہ منتخب کریں۔</string>
+    <string name="collage_editor_choose_place">جگہ منتخب کریں</string>
+    <string name="collage_editor_change_place">جگہ بدلیں</string>
+    <string name="collage_editor_place_picker_title">کولاج کی جگہ</string>
+    <string name="collage_editor_place_picker_subtitle">نقشے پر ٹیپ کریں یا نقاط درج کریں۔</string>
+    <string name="collage_editor_selected_place">منتخب جگہ</string>
+    <string name="collage_editor_address_optional">پتہ اختیاری ہے۔ ممکن ہونے پر خود تلاش کیا جائے گا۔</string>
+    <string name="collage_editor_invalid_map_location">درست عرض بلد اور طول بلد درج کریں</string>
+    <string name="collage_editor_map_location_saved">جگہ محفوظ ہو گئی اور نقشے میں شامل کر دی گئی</string>
+    <string name="collage_editor_map_location_failed">جگہ محفوظ نہیں ہو سکی</string>
+    <string name="collage_editor_text_fields_title">متن کے خانے</string>
+    <string name="collage_editor_text_fields_subtitle">متن کی الگ تہیں شامل کریں اور ہر ایک کو کولاج پر کھینچ کر رکھیں۔</string>
+    <string name="collage_editor_add_text_field">متن کا خانہ شامل کریں</string>
+    <string name="collage_editor_new_text_default">متن</string>
+    <string name="collage_editor_text_field_number">متن %1$d</string>
+    <string name="collage_editor_text_content">متن</string>
+    <string name="collage_editor_text_width">خانے کی چوڑائی</string>
+    <string name="collage_editor_text_size">متن کا سائز</string>
+    <string name="collage_editor_text_shape">شکل</string>
+    <string name="collage_editor_text_shape_none">بغیر پس منظر</string>
+    <string name="collage_editor_text_shape_rectangle">مستطیل</string>
+    <string name="collage_editor_text_shape_rounded">گول کونے</string>
+    <string name="collage_editor_text_shape_pill">کیپسول</string>
+    <string name="collage_editor_text_roundness">کونوں کی گولائی</string>
+    <string name="collage_editor_text_color">متن کا رنگ</string>
+    <string name="collage_editor_text_background">پس منظر کا رنگ</string>
+    <string name="collage_editor_text_background_opacity">پس منظر کی غیر شفافیت</string>
+    <string name="collage_editor_text_border">فریم</string>
+    <string name="collage_editor_text_border_color">فریم کا رنگ</string>
+    <string name="collage_editor_delete_text_field">متن کا خانہ حذف کریں</string>
+    <string name="collage_editor_select_text_hint">ترمیم کے لیے اوپر متن کا خانہ منتخب کریں یا کولاج پر اس پر ٹیپ کریں۔</string>
+    <string name="collage_editor_selected_caption_title">منتخب تصویر کا عنوان</string>
+    <string name="collage_editor_selected_caption_subtitle">منتخب لیبل بدلیں۔ اسے منتقل کرنے کے لیے کولاج پر کھینچیں۔</string>
+    <string name="collage_editor_caption_content">عنوان کا متن</string>
+    <string name="collage_editor_more_settings">مزید</string>
+    <string name="collage_editor_fewer_settings">کم</string>
+    <string name="settings_language_indonesian">Bahasa Indonesia (انڈونیشیائی)</string>
+    <string name="settings_dunta_title">ڈیولپر کی مدد کے لیے ڈیٹا شیئر کریں</string>
+    <string name="settings_dunta_subtitle">اختیاری۔ MAFIX LTD کے ذریعے Bright Data کو عوامی ویب ڈیٹا کے لیے انٹرنیٹ کنکشن اور IP ایڈریس استعمال کرنے دیتا ہے۔ کسی بھی وقت بند کر سکتے ہیں۔</string>
+    <string name="settings_dunta_unavailable">اس ورژن میں سپورٹ موڈ دستیاب نہیں ہے۔</string>
+    <string name="settings_dunta_more_info_title">MAFIX کی رازداری کی پالیسی</string>
+    <string name="settings_dunta_more_info_subtitle">ڈیٹا کے استعمال اور بند کرنے کی شرائط پڑھیں۔</string>
+    <string name="settings_dunta_not_configured">اس ورژن میں سپورٹ موڈ دستیاب نہیں ہے۔</string>
+    <string name="settings_dunta_activity_unavailable">اس وقت رضامندی کی اسکرین نہیں کھل سکی</string>
+    <string name="settings_dunta_enabled">ڈیٹا شیئرنگ فعال ہے</string>
+    <string name="settings_dunta_disabled">ڈیٹا شیئرنگ بند ہے</string>
+    <string name="settings_dunta_declined">ڈیٹا شیئرنگ فعال نہیں کی گئی</string>
+    <string name="dunta_dialog_title">مفت میں PinPix کی مدد کریں</string>
+    <string name="dunta_notification_title">PinPix سپورٹ موڈ</string>
+    <string name="dunta_notification_content">سپورٹ موڈ فعال ہے۔ سیٹنگز میں بند کر سکتے ہیں۔</string>
+    <string name="proxy_description_title">مفت میں PinPix کی مدد کریں</string>
+    <string name="proxy_description_accept_btn">شیئرنگ فعال کریں</string>
+    <string name="proxy_description_decline_btn">ابھی نہیں</string>
+    <string name="proxy_description_policy_text">MAFIX LTD کی رازداری کی پالیسی پڑھیں</string>
+    <string name="proxy_description_private_eula_item">صارف کے لائسنس کا معاہدہ</string>
+    <string name="proxy_description_private_pol_item">رازداری کی پالیسی</string>
+    <string name="proxy_description_text">PinPix کی مدد کے لیے اختیاری سپورٹ موڈ فعال کریں۔ MAFIX LTD کے SDK کے ذریعے Bright Data نیٹ ورک عوامی ویب ڈیٹا ڈاؤن لوڈ کرنے کے لیے آپ کے انٹرنیٹ کنکشن کے ایک محدود حصے اور IP ایڈریس کو استعمال کر سکتا ہے، جب ایپ پس منظر میں ہو تب بھی۔\n\nآپ کی تصاویر اور ذاتی فائلیں شیئر نہیں کی جاتیں۔ نیٹ ورک کے استعمال سے بیٹری اور ڈیٹا کا استعمال متاثر ہو سکتا ہے۔\n\nآپ انکار کر کے بھی ایپ استعمال کر سکتے ہیں یا سیٹنگز میں کسی بھی وقت سپورٹ موڈ بند کر سکتے ہیں۔</string>
+    <string name="support_prompt_title">PinPix کو مفت رکھنے میں مدد کریں</string>
+    <string name="support_prompt_intro">سپورٹ موڈ MAFIX LTD کے SDK کے ذریعے Bright Data نیٹ ورک کو آپ کے انٹرنیٹ کنکشن کا محدود حصہ استعمال کرنے دیتا ہے۔ فیصلہ آپ کا ہے۔</string>
+    <string name="support_prompt_network">پس منظر میں Wi-Fi، انتہائی محدود موبائل ڈیٹا، آپ کا IP ایڈریس اور کچھ ڈیوائس وسائل استعمال ہو سکتے ہیں۔</string>
+    <string name="support_prompt_privacy">آپ کی ذاتی فائلوں، تصاویر یا پیغامات تک رسائی نہیں کی جاتی۔</string>
+    <string name="support_prompt_control">فعال ہونے پر اطلاع نظر آتی ہے۔ ترتیبات میں اسے کسی بھی وقت بند کریں۔</string>
+    <string name="support_prompt_unavailable">اس build میں SDK IDs configured نہ ہونے کی وجہ سے سپورٹ موڈ دستیاب نہیں ہے۔</string>
+    <string name="support_prompt_optional">اختیاری</string>
+    <string name="support_prompt_not_now">ابھی نہیں</string>
+    <string name="support_prompt_policy">پرائیویسی پالیسی</string>
+    <string name="support_prompt_terms">فعال کر کے آپ SDK کی شرائط اور پرائیویسی پالیسی سے اتفاق کرتے ہیں۔</string>
+    <string name="support_prompt_enable">ہاں — اسے فعال کریں</string>
+    <string name="support_prompt_enable_subtitle">سپورٹ موڈ فعال کریں</string>
+</resources>

@@ -13,3 +13,16 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Local tools, generated distributions and signing material
+.idea/
+.kotlin/
+**/build/
+**/release/
+*.apk
+*.aab
+*.jks
+*.keystore
+*.hprof
+.env
+.env.*

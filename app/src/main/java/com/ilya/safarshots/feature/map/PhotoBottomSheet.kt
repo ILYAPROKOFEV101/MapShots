@@ -36,9 +36,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.ilya.safarshots.R
+import com.ilya.safarshots.core.common.DateLabels
 import com.ilya.safarshots.core.common.DateTimeFormatters
+import com.ilya.safarshots.core.locale.rememberDateLabels
 import com.ilya.safarshots.domain.model.GeoPhoto
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +57,7 @@ fun PhotoBottomSheet(
     onDelete: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val dateLabels = rememberDateLabels()
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
@@ -79,7 +84,7 @@ fun PhotoBottomSheet(
             }
             Spacer(Modifier.height(20.dp))
             Text(
-                photo.headerTitle(),
+                photo.headerTitle(dateLabels),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2,
@@ -110,7 +115,7 @@ fun PhotoBottomSheet(
             photo.location?.accuracyMeters?.let {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    "Accuracy ${it.toInt()} m",
+                    stringResource(R.string.photo_detail_accuracy, it.toInt()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -123,12 +128,12 @@ fun PhotoBottomSheet(
                 FilledTonalButton(onClick = onOpen, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Rounded.OpenInFull, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Open")
+                    Text(stringResource(R.string.photo_sheet_open))
                 }
                 OutlinedButton(onClick = onAddToCollage, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Rounded.Add, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Collage")
+                    Text(stringResource(R.string.photo_sheet_collage))
                 }
             }
             Spacer(Modifier.height(12.dp))
@@ -146,18 +151,18 @@ fun PhotoBottomSheet(
                 ) {
                     BottomActionIcon(
                         icon = if (photo.isFavorite) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                        contentDescription = "Favorite",
+                        contentDescription = stringResource(R.string.photo_sheet_favorite_cd),
                         onClick = onFavorite,
                         tint = if (photo.isFavorite) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     BottomActionIcon(
                         icon = Icons.Rounded.IosShare,
-                        contentDescription = "Share",
+                        contentDescription = stringResource(R.string.photo_sheet_share_cd),
                         onClick = onShare,
                     )
                     BottomActionIcon(
                         icon = Icons.Rounded.Delete,
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(R.string.photo_sheet_delete_cd),
                         onClick = onDelete,
                         tint = MaterialTheme.colorScheme.error,
                     )
@@ -183,10 +188,10 @@ private fun BottomActionIcon(
     }
 }
 
-private fun GeoPhoto.headerTitle(): String {
+private fun GeoPhoto.headerTitle(labels: DateLabels): String {
     note?.takeIf { it.isNotBlank() }?.let { return it }
     location?.addressText?.takeIf { it.isNotBlank() }?.let { return it }
-    return DateTimeFormatters.galleryGroup(capturedAtMillis)
+    return DateTimeFormatters.galleryGroup(capturedAtMillis, labels)
 }
 
 private fun GeoPhoto.locationLine(): String? {

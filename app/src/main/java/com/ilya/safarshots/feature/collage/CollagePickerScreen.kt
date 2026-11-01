@@ -44,9 +44,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ilya.safarshots.R
+import com.ilya.safarshots.core.locale.rememberDateLabels
 import com.ilya.safarshots.design.EmptyState
 import com.ilya.safarshots.domain.model.CollageTemplate
 import com.ilya.safarshots.feature.gallery.GalleryDateGrouper
@@ -61,6 +64,7 @@ fun CollagePickerScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val selectedPhotos = state.selectedPhotos
+    val dateLabels = rememberDateLabels()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     // Two-step flow: pick photos (multi-select) → optionally choose a template.
     // Tracked locally so it's restored across config changes but doesn't pollute the VM.
@@ -77,11 +81,11 @@ fun CollagePickerScreen(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             LargeTopAppBar(
-                title = { Text(if (showTemplateStep) "Шаблон коллажа" else "Collage") },
+                title = { Text(stringResource(if (showTemplateStep) R.string.collage_template_step_title else R.string.collage_title)) },
                 navigationIcon = {
                     if (showTemplateStep) {
                         IconButton(onClick = { showTemplateStep = false }) {
-                            Icon(Icons.Rounded.ArrowBack, contentDescription = "Назад к выбору фото")
+                            Icon(Icons.Rounded.ArrowBack, contentDescription = stringResource(R.string.collage_back_to_photos_cd))
                         }
                     }
                 },
@@ -110,16 +114,16 @@ fun CollagePickerScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         FilledTonalIconButton(onClick = { viewModel.clearSelection() }) {
-                            Icon(Icons.Rounded.Close, contentDescription = "Сбросить выбор")
+                            Icon(Icons.Rounded.Close, contentDescription = stringResource(R.string.collage_clear_selection_cd))
                         }
                         Text(
-                            "${state.selectedIds.size} фото",
+                            stringResource(R.string.photo_count, state.selectedIds.size),
                             modifier = Modifier.weight(1f),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                         )
                         FilledTonalButton(onClick = { showTemplateStep = true }) {
-                            Text("Continue")
+                            Text(stringResource(R.string.action_continue))
                             Spacer(Modifier.width(8.dp))
                             Icon(Icons.Rounded.ArrowForward, contentDescription = null)
                         }
@@ -130,9 +134,9 @@ fun CollagePickerScreen(
     ) { padding ->
         when {
             state.allPhotos.isEmpty() -> EmptyState(
-                title = "Выберите фото для коллажа",
-                subtitle = "Можно выбрать фото на карте или в галерее.",
-                buttonText = "Открыть галерею",
+                title = stringResource(R.string.collage_picker_empty_title),
+                subtitle = stringResource(R.string.collage_picker_empty_subtitle),
+                buttonText = stringResource(R.string.collage_picker_empty_button),
                 icon = Icons.Rounded.Collections,
                 modifier = Modifier.padding(padding).fillMaxSize(),
                 onButtonClick = onOpenGallery,
@@ -149,16 +153,16 @@ fun CollagePickerScreen(
             else -> Column(Modifier.padding(padding).fillMaxSize()) {
                 Text(
                     if (state.selectedIds.isEmpty()) {
-                        "Выберите 1–12 фото"
+                        stringResource(R.string.collage_pick_hint)
                     } else {
-                        "Выбрано ${state.selectedIds.size} из 12 · можно добавить ещё"
+                        stringResource(R.string.collage_pick_progress, state.selectedIds.size)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 PhotoGrid(
-                    groups = GalleryDateGrouper.group(state.allPhotos),
+                    groups = GalleryDateGrouper.group(state.allPhotos, dateLabels),
                     selectedIds = state.selectedIds,
                     selectionMode = true,
                     onPhotoClick = { viewModel.toggleSelection(it.id) },
@@ -185,12 +189,12 @@ private fun TemplatePickerContent(
         item {
             Column(verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(bottom = 8.dp)) {
                 Text(
-                    "$selectedCount фото готовы к коллажу",
+                    stringResource(R.string.collage_template_ready, selectedCount),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    "Выберите шаблон. Схематичная карта экспортируется без Google tiles и без риска обрезать attribution.",
+                    stringResource(R.string.collage_template_pick_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -200,6 +204,7 @@ private fun TemplatePickerContent(
             TemplateCard(
                 template = template,
                 selected = template == selected,
+                enabled = selectedCount >= template.minimumPhotos,
                 onClick = { onTemplate(template) },
             )
         }
@@ -210,14 +215,15 @@ private fun TemplatePickerContent(
 private fun TemplateCard(
     template: CollageTemplate,
     selected: Boolean,
+    enabled: Boolean,
     onClick: () -> Unit,
 ) {
-    val containerColor = if (selected) {
+    val containerColor = if (selected && enabled) {
         MaterialTheme.colorScheme.secondaryContainer
     } else {
         MaterialTheme.colorScheme.surfaceContainerLow
     }
-    val onContainer = if (selected) {
+    val onContainer = if (selected && enabled) {
         MaterialTheme.colorScheme.onSecondaryContainer
     } else {
         MaterialTheme.colorScheme.onSurface
@@ -226,7 +232,7 @@ private fun TemplateCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
-            .clickable(onClick = onClick),
+            .clickable(enabled = enabled, onClick = onClick),
         shape = RoundedCornerShape(24.dp),
         color = containerColor,
     ) {
@@ -249,17 +255,28 @@ private fun TemplateCard(
                 )
             }
             Column(modifier = Modifier.weight(1f)) {
-                Text(template.title, style = MaterialTheme.typography.titleMedium, color = onContainer)
                 Text(
-                    template.subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = onContainer.copy(alpha = 0.8f),
+                    stringResource(template.titleRes),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = onContainer.copy(alpha = if (enabled) 1f else 0.55f),
                 )
+                Text(
+                    stringResource(template.subtitleRes),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = onContainer.copy(alpha = if (enabled) 0.8f else 0.5f),
+                )
+                if (!enabled) {
+                    Text(
+                        stringResource(R.string.collage_template_more_photos_needed, template.minimumPhotos),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
             }
             Icon(
                 Icons.Rounded.ArrowForward,
                 contentDescription = null,
-                tint = onContainer.copy(alpha = 0.7f),
+                tint = onContainer.copy(alpha = if (enabled) 0.7f else 0.3f),
             )
         }
     }

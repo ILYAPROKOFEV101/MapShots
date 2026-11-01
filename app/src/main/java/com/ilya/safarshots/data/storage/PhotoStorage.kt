@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
+import android.net.Uri
 import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
+import com.ilya.safarshots.domain.model.PhotoLocation
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,9 +31,31 @@ class PhotoStorage @Inject constructor(
         thumbnailsDir.mkdirs()
     }
 
-    fun createOriginalFile(nowMillis: Long = System.currentTimeMillis()): File {
+    fun createOriginalFile(nowMillis: Long = System.currentTimeMillis(), extension: String = "jpg"): File {
         originalsDir.mkdirs()
-        return File(originalsDir, "${nowMillis}_${UUID.randomUUID()}.jpg")
+        return File(originalsDir, "${nowMillis}_${UUID.randomUUID()}.$extension")
+    }
+
+    suspend fun importFromUri(sourceUri: String): File? = withContext(Dispatchers.IO) {
+        runCatching {
+            val parsed = Uri.parse(sourceUri)
+            val extension = context.contentResolver.getType(parsed)
+                ?.substringAfterLast('/', "")
+                ?.lowercase()
+                ?.takeIf { it in setOf("jpeg", "jpg", "png", "webp", "heic") }
+                ?.let { if (it == "jpeg") "jpg" else it }
+                ?: "jpg"
+            val outputFile = createOriginalFile(extension = extension)
+            try {
+                context.contentResolver.openInputStream(parsed)?.use { input ->
+                    outputFile.outputStream().use { output -> input.copyTo(output) }
+                } ?: return@withContext null
+            } catch (error: Throwable) {
+                outputFile.delete()
+                throw error
+            }
+            outputFile
+        }.getOrNull()
     }
 
     suspend fun createThumbnail(originalFile: File): String? = withContext(Dispatchers.IO) {
@@ -83,6 +107,18 @@ class PhotoStorage @Inject constructor(
 
     suspend fun readColorSeedAsync(file: File): Int? = withContext(Dispatchers.IO) {
         readColorSeed(file)
+    }
+
+    /** Persists the capture location in the original image as standard GPS EXIF metadata. */
+    suspend fun writeLocationExif(file: File, location: PhotoLocation): Boolean = withContext(Dispatchers.IO) {
+        runCatching {
+            ExifInterface(file).apply {
+                setLatLong(location.latitude, location.longitude)
+                location.altitude?.let(::setAltitude)
+                saveAttributes()
+            }
+            true
+        }.getOrDefault(false)
     }
 
     suspend fun deletePhotoFiles(photoUri: String, thumbnailUri: String?) = withContext(Dispatchers.IO) {

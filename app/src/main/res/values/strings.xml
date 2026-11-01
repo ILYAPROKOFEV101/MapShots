@@ -1,3 +1,330 @@
 <resources>
-    <string name="app_name">GeoMapShots</string>
+    <string name="app_name">PinPix: Photo Map</string>
+
+    <!-- Common actions -->
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_done">Done</string>
+    <string name="action_back">Back</string>
+    <string name="action_close">Close</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_open">Open</string>
+    <string name="action_share">Share</string>
+    <string name="action_clear">Clear</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_map">Map</string>
+    <string name="nav_camera">Camera</string>
+    <string name="nav_gallery">Gallery</string>
+    <string name="nav_collage">Collage</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Map screen -->
+    <string name="map_capture">Capture</string>
+    <string name="map_empty_title">The map is empty</string>
+    <string name="map_empty_subtitle">Take your first photo and it will appear here as a beautiful pin.</string>
+    <string name="map_empty_button">Take a photo</string>
+    <string name="map_no_api_title">Google Maps API key is not configured</string>
+    <string name="map_no_api_subtitle">Add MAPS_API_KEY to local.properties and restart the app.</string>
+    <string name="map_settings_cd">Settings</string>
+    <string name="map_clear_cd">Clear</string>
+    <string name="map_create_collage">Create collage</string>
+    <string name="photo_count">%1$d photos</string>
+    <string name="map_photo_deleted">Photo deleted</string>
+
+    <!-- Filters -->
+    <string name="filter_all">All</string>
+    <string name="filter_today">Today</string>
+    <string name="filter_week">This week</string>
+    <string name="filter_favorites">Favorites</string>
+    <string name="filter_with_notes">With notes</string>
+    <string name="filter_no_location">No location</string>
+    <string name="filter_with_location">With location</string>
+
+    <!-- Camera -->
+    <string name="camera_permission_title">Camera permission needed</string>
+    <string name="camera_permission_subtitle">To take photos directly in the app.</string>
+    <string name="camera_permission_button">Grant camera</string>
+    <string name="camera_close_cd">Close</string>
+    <string name="camera_flash_cd">Flash</string>
+    <string name="camera_grid_cd">Toggle grid</string>
+    <string name="camera_flip_cd">Switch camera</string>
+    <string name="camera_capture_failed">Failed to take photo</string>
+    <string name="camera_save_failed">Failed to save photo</string>
+    <string name="location_searching">Searching location…</string>
+    <string name="location_ready">Location ready</string>
+    <string name="location_approximate">Approximate location</string>
+    <string name="location_none">No location</string>
+
+    <!-- Gallery -->
+    <string name="gallery_title">Gallery</string>
+    <string name="gallery_import_cd">Import photo</string>
+    <string name="gallery_open_camera_cd">Open camera</string>
+    <string name="gallery_collage">Collage</string>
+    <string name="gallery_empty_title">Take your first photo</string>
+    <string name="gallery_empty_subtitle">Photos appear in the gallery and on the map right after capture.</string>
+    <string name="gallery_empty_button">Open camera</string>
+    <string name="gallery_import_failed">Failed to import photo</string>
+    <string name="photo_selected_cd">Selected</string>
+
+    <!-- Photo detail -->
+    <string name="photo_detail_default_title">Photo</string>
+    <string name="photo_detail_favorite_cd">Favorite</string>
+    <string name="photo_detail_not_found_title">Photo not found</string>
+    <string name="photo_detail_not_found_subtitle">It may have been deleted.</string>
+    <string name="photo_detail_note_dialog_title">Note</string>
+    <string name="photo_detail_delete_dialog_title">Delete photo?</string>
+    <string name="photo_detail_delete_dialog_text">The record and local files will be removed permanently.</string>
+    <string name="photo_detail_location_title">Photo location</string>
+    <string name="photo_detail_location_subtitle">Tap on the map to choose a point. The screen works as a Google Maps-style picker.</string>
+    <string name="photo_detail_location_no_map">Map not available: add MAPS_API_KEY. You can enter coordinates manually.</string>
+    <string name="photo_detail_latitude_label">Latitude (lat)</string>
+    <string name="photo_detail_longitude_label">Longitude (lng)</string>
+    <string name="photo_detail_address_label">Address caption (optional)</string>
+    <string name="photo_detail_picker_marker_title">Selected point</string>
+    <string name="photo_detail_picker_no_point">No point selected</string>
+    <string name="photo_detail_remove_location">Remove geotag</string>
+    <string name="photo_detail_invalid_coordinates">Enter valid coordinates</string>
+    <string name="photo_detail_coordinates_out_of_range">Coordinates are out of the allowed range</string>
+    <string name="photo_detail_location_saved">Location saved</string>
+    <string name="photo_detail_location_removed">Location removed</string>
+    <string name="photo_detail_add_note">Add note</string>
+    <string name="photo_detail_edit_note">Edit note</string>
+    <string name="photo_detail_set_location">Set location</string>
+    <string name="photo_detail_edit_location">Edit location</string>
+    <string name="photo_detail_no_location">No location</string>
+    <string name="photo_detail_location_saved_label">Location saved</string>
+    <string name="photo_detail_accuracy">Accuracy %1$d m</string>
+    <string name="photo_detail_collage">Collage</string>
+    <string name="photo_detail_share">Share</string>
+    <string name="photo_detail_map">Map</string>
+    <string name="photo_detail_delete">Delete</string>
+
+    <!-- Photo bottom sheet -->
+    <string name="photo_sheet_open">Open</string>
+    <string name="photo_sheet_collage">Collage</string>
+    <string name="photo_sheet_favorite_cd">Favorite</string>
+    <string name="photo_sheet_share_cd">Share</string>
+    <string name="photo_sheet_delete_cd">Delete</string>
+
+    <!-- Collage picker -->
+    <string name="collage_title">Collage</string>
+    <string name="collage_template_step_title">Collage template</string>
+    <string name="collage_back_to_photos_cd">Back to photo selection</string>
+    <string name="collage_clear_selection_cd">Clear selection</string>
+    <string name="collage_picker_empty_title">Choose photos for the collage</string>
+    <string name="collage_picker_empty_subtitle">You can pick photos on the map or in the gallery.</string>
+    <string name="collage_picker_empty_button">Open gallery</string>
+    <string name="collage_pick_hint">Choose 1–12 photos</string>
+    <string name="collage_pick_progress">%1$d of 12 selected · you can add more</string>
+    <string name="collage_template_ready">%1$d photos ready for the collage</string>
+    <string name="collage_template_pick_subtitle">Choose a layout that fits your photos. You can change the format and style in the editor.</string>
+    <string name="collage_template_photo_requirement">%1$d+ photos</string>
+    <string name="collage_template_more_photos_needed">Select at least %1$d photos</string>
+
+    <!-- Collage editor -->
+    <string name="collage_editor_export">Export</string>
+    <string name="collage_editor_saving">Saving…</string>
+    <string name="collage_editor_rendering">Rendering…</string>
+    <string name="collage_editor_exporting">Exporting…</string>
+    <string name="collage_editor_preview">Preview</string>
+    <string name="collage_editor_preview_cd">Collage preview</string>
+    <string name="collage_editor_select_limit">You can select up to %1$d photos</string>
+    <string name="collage_editor_save_address_failed">Failed to save address</string>
+    <string name="collage_editor_render_failed">Failed to create preview</string>
+    <string name="collage_editor_saved">Collage saved</string>
+    <string name="collage_editor_export_failed">Failed to export collage</string>
+    <string name="collage_editor_tab_photos">Photos</string>
+    <string name="collage_editor_tab_layout">Layout</string>
+    <string name="collage_editor_tab_style">Style</string>
+    <string name="collage_editor_tab_map">Map</string>
+    <string name="collage_editor_tab_info">Text</string>
+    <string name="collage_editor_photos_title">Photos in collage</string>
+    <string name="collage_editor_photos_subtitle">Tap a photo to make it hero. Tap × to drop it, or + to add more.</string>
+    <string name="collage_editor_minimap_title">Mini-map</string>
+    <string name="collage_editor_caption_layer">Caption</string>
+    <string name="collage_editor_selected_photo">Selected photo</string>
+    <string name="collage_editor_selection">Selection</string>
+    <string name="collage_editor_size">Size</string>
+    <string name="collage_editor_use_as_background">Use as background</string>
+    <string name="collage_editor_map_size">Map size</string>
+    <string name="collage_editor_caption_width">Caption width</string>
+    <string name="collage_editor_template">Template</string>
+    <string name="collage_editor_template_subtitle">How the photos and the map are arranged on the canvas.</string>
+    <string name="collage_editor_aspect_ratio">Aspect ratio</string>
+    <string name="collage_editor_map_position">Map position</string>
+    <string name="collage_editor_background">Background</string>
+    <string name="collage_editor_background_subtitle">Pick the hero photo as the backdrop, or use a solid colour.</string>
+    <string name="collage_editor_bg_photo">Photo</string>
+    <string name="collage_editor_bg_color">Color</string>
+    <string name="collage_editor_hero_hint">The hero photo (★) fills the background. Pick a different hero in Photos.</string>
+    <string name="collage_editor_theme">Theme</string>
+    <string name="collage_editor_dark_style">Dark style</string>
+    <string name="collage_editor_minimap_subtitle">Add a movable map layer to any collage layout.</string>
+    <string name="collage_editor_show_minimap">Show mini-map</string>
+    <string name="collage_editor_add_map">Add map</string>
+    <string name="collage_editor_remove_map">Remove map</string>
+    <string name="collage_editor_choose_map_photo">Choose map location</string>
+    <string name="collage_editor_no_geotagged_photo">None of the selected photos has a location. Add a location to a photo first.</string>
+    <string name="collage_editor_choose_location_hint">This photo has no location yet. Choose a point on the map to add one.</string>
+    <string name="collage_editor_choose_place">Choose place on map</string>
+    <string name="collage_editor_change_place">Change place</string>
+    <string name="collage_editor_place_picker_title">Place on map</string>
+    <string name="collage_editor_place_picker_subtitle">Move and zoom the map, then tap the exact place. Its address will be found automatically.</string>
+    <string name="collage_editor_selected_place">Selected place</string>
+    <string name="collage_editor_address_optional">Optional — the address will be found automatically when possible</string>
+    <string name="collage_editor_invalid_map_location">Enter valid latitude and longitude</string>
+    <string name="collage_editor_map_location_saved">Place saved and added to the map</string>
+    <string name="collage_editor_map_location_failed">Couldn’t save this place</string>
+    <string name="collage_editor_tourist_map">Tourist map</string>
+    <string name="collage_editor_text_fields_title">Text fields</string>
+    <string name="collage_editor_text_fields_subtitle">Add several independent text layers and drag each one directly on the collage.</string>
+    <string name="collage_editor_add_text_field">Add text field</string>
+    <string name="collage_editor_new_text_default">Text</string>
+    <string name="collage_editor_text_field_number">Text %1$d</string>
+    <string name="collage_editor_text_content">Text</string>
+    <string name="collage_editor_text_width">Field width</string>
+    <string name="collage_editor_text_size">Text size</string>
+    <string name="collage_editor_text_shape">Shape</string>
+    <string name="collage_editor_text_shape_none">No background</string>
+    <string name="collage_editor_text_shape_rectangle">Rectangle</string>
+    <string name="collage_editor_text_shape_rounded">Rounded</string>
+    <string name="collage_editor_text_shape_pill">Pill</string>
+    <string name="collage_editor_text_roundness">Corner roundness</string>
+    <string name="collage_editor_text_color">Text color</string>
+    <string name="collage_editor_text_background">Background color</string>
+    <string name="collage_editor_text_background_opacity">Background opacity</string>
+    <string name="collage_editor_text_border">Frame</string>
+    <string name="collage_editor_text_border_color">Frame color</string>
+    <string name="collage_editor_delete_text_field">Delete text field</string>
+    <string name="collage_editor_select_text_hint">Select a text field above or tap it on the collage to edit it.</string>
+    <string name="collage_editor_caption_title">Photo caption</string>
+    <string name="collage_editor_caption_subtitle">Optional automatic caption with the photo address, date, and coordinates.</string>
+    <string name="collage_editor_selected_caption_title">Selected photo caption</string>
+    <string name="collage_editor_selected_caption_subtitle">Customize the selected base label. Drag it directly on the collage to move it.</string>
+    <string name="collage_editor_caption_content">Caption content</string>
+    <string name="collage_editor_more_settings">More</string>
+    <string name="collage_editor_fewer_settings">Less</string>
+    <string name="collage_editor_show_caption">Show text</string>
+    <string name="collage_editor_custom_text">Your text</string>
+    <string name="collage_editor_custom_text_placeholder">Add a title or a short story…</string>
+    <string name="collage_editor_custom_text_hint">Leave blank to use the photo address or note.</string>
+    <string name="collage_editor_clear_text_cd">Clear text</string>
+    <string name="collage_editor_caption_date">Date</string>
+    <string name="collage_editor_caption_coords">Coordinates</string>
+    <string name="collage_editor_caption_address">Address</string>
+    <string name="collage_editor_address_placeholder">Street, city, country…</string>
+    <string name="collage_editor_address_resolving">Looking up address…</string>
+    <string name="collage_editor_save_address">Save address</string>
+    <string name="collage_editor_hero_photo_cd">Hero photo</string>
+    <string name="collage_editor_remove_from_collage_cd">Remove from collage</string>
+    <string name="collage_editor_add_photo_cd">Add a photo to the collage</string>
+    <string name="collage_editor_higher_zoom_cd">Higher map camera</string>
+    <string name="collage_editor_closer_zoom_cd">Closer map camera</string>
+    <string name="collage_editor_map_camera">Map camera</string>
+    <string name="collage_editor_zoom_overview">Higher overview</string>
+    <string name="collage_editor_zoom_balanced">Balanced view</string>
+    <string name="collage_editor_zoom_close">Closer view</string>
+    <string name="collage_editor_map_label">Map</string>
+    <string name="collage_editor_add_photos">Add photos</string>
+    <string name="collage_editor_at_limit">You\'ve reached the %1$d-photo limit. Remove one to add more.</string>
+    <string name="collage_editor_all_added">All your library photos are already in the collage.</string>
+    <string name="collage_editor_pick_to_add">Tap a photo to add it. It will appear as a draggable card on the preview.</string>
+    <string name="collage_editor_layout_needs_photos">Needs %1$d+ photos</string>
+    <string name="collage_editor_no_map_layout">This layout focuses on photos. Choose Photo + map or Postcard to add a mini-map.</string>
+
+    <!-- Collage templates -->
+    <string name="template_photo_with_map">Photo + map</string>
+    <string name="template_photo_with_map_subtitle">Full-bleed photo with a corner mini map</string>
+    <string name="template_split_vertical">50 / 50</string>
+    <string name="template_split_vertical_subtitle">Two photos side by side</string>
+    <string name="template_split_horizontal">Top &amp; bottom</string>
+    <string name="template_split_horizontal_subtitle">Two equal photos stacked vertically</string>
+    <string name="template_grid">Photo grid</string>
+    <string name="template_grid_subtitle">A balanced grid for up to 12 photos</string>
+    <string name="template_magazine">Magazine</string>
+    <string name="template_magazine_subtitle">One bold hero with supporting photos</string>
+    <string name="template_postcard">Postcard</string>
+    <string name="template_postcard_subtitle">One hero photo with a mini map</string>
+
+    <!-- Collage map corner -->
+    <string name="corner_top_left">Top-left</string>
+    <string name="corner_top_right">Top-right</string>
+    <string name="corner_bottom_left">Bottom-left</string>
+    <string name="corner_bottom_right">Bottom-right</string>
+
+    <!-- Common date labels -->
+    <string name="date_today">Today</string>
+    <string name="date_yesterday">Yesterday</string>
+    <string name="date_this_week">This week</string>
+
+    <!-- Common labels -->
+    <string name="common_no_location">No location</string>
+    <string name="share_image_title">Share image</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_privacy">Privacy</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_section_language">Language</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_language_title">App language</string>
+    <string name="settings_language_subtitle">Pick how the app text appears.</string>
+    <string name="settings_language_dialog_title">Choose language</string>
+    <string name="settings_language_system">System default</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_indonesian">Bahasa Indonesia (Indonesian)</string>
+    <string name="settings_language_hindi">हिन्दी (Hindi)</string>
+    <string name="settings_language_urdu">اردو (Urdu)</string>
+    <string name="settings_exif_title">Write geo data to EXIF</string>
+    <string name="settings_exif_subtitle">Off by default. Coordinates are stored in the local database.</string>
+    <string name="settings_precise_title">Show precise coordinates</string>
+    <string name="settings_precise_subtitle">In photo details and collages.</string>
+    <string name="settings_dunta_title">Share data to support developer</string>
+    <string name="settings_dunta_subtitle">Optional. Allows MAFIX LTD to safely use free device resources and IP address to download public web data. You can turn it off anytime.</string>
+    <string name="settings_dunta_unavailable">Support mode is unavailable in this build.</string>
+    <string name="settings_dunta_more_info_title">MAFIX privacy policy</string>
+    <string name="settings_dunta_more_info_subtitle">Open details about data use and opt-out terms.</string>
+    <string name="settings_dunta_not_configured">Support mode is unavailable in this build.</string>
+    <string name="settings_dunta_activity_unavailable">Unable to open SDK consent right now</string>
+    <string name="settings_dunta_enabled">Data sharing enabled</string>
+    <string name="settings_dunta_disabled">Data sharing disabled</string>
+    <string name="settings_dunta_declined">Data sharing was not enabled</string>
+    <string name="settings_material_you_title">Material You</string>
+    <string name="settings_material_you_subtitle">Use Android 12+ system colors.</string>
+    <string name="settings_delete_title">Delete all data</string>
+    <string name="settings_delete_subtitle">Local Room records, photos, and thumbnails.</string>
+    <string name="settings_delete_dialog_title">Delete all data?</string>
+    <string name="settings_delete_dialog_text">This deletes local records and PinPix: Photo Map files. This action cannot be undone.</string>
+    <string name="settings_data_deleted">All local data has been deleted</string>
+
+    <!-- Dunta SDK -->
+    <string name="dunta_dialog_title">Support PinPix for free</string>
+    <string name="dunta_notification_title">PinPix support service</string>
+    <string name="dunta_notification_content">Support mode is active. You can turn it off in Settings.</string>
+    <string name="proxy_description_title">Support PinPix for free</string>
+    <string name="proxy_description_text">Enable optional support mode to support PinPix. Through MAFIX LTD’s SDK, the Bright Data network can use a limited part of your internet connection and your IP address to download public web data, including while the app is in the background.\n\nYour photos and personal files are not shared. Network use may affect battery life and data usage.\n\nYou can decline and keep using the app, or turn support mode off anytime in Settings.</string>
+    <string name="proxy_description_accept_btn">Enable sharing</string>
+    <string name="proxy_description_decline_btn">Not now</string>
+    <string name="proxy_description_policy_text">Read MAFIX LTD\'s Privacy Policy</string>
+    <string name="proxy_description_private_eula_item">End User License Agreement</string>
+    <string name="proxy_description_private_pol_item">Privacy Policy</string>
+    <string name="proxy_policy_link" translatable="false">https://zmoba.com/privacyPolicy</string>
+    <string name="proxy_terms_link" translatable="false">https://zmoba.com/termsOfUse</string>
+    <string name="settings_dunta_battery_title">Optional support mode</string>
+    <string name="settings_dunta_battery_unrestricted">Background recovery is allowed. You can change this in Android battery settings.</string>
+    <string name="settings_dunta_battery_restricted">To allow support mode to recover in the background, open battery settings and choose Don’t optimize for this app. This is optional.</string>
+    <string name="support_prompt_title">Help keep PinPix free</string>
+    <string name="support_prompt_intro">Support mode lets the Bright Data network use a limited part of your internet connection through MAFIX LTD\'s SDK. The choice is yours.</string>
+    <string name="support_prompt_network">May use Wi-Fi, very limited mobile data, your IP address and some device resources in the background.</string>
+    <string name="support_prompt_privacy">Does not access your personal files, photos or messages.</string>
+    <string name="support_prompt_control">A notification is shown while active. Turn it off anytime in Settings.</string>
+    <string name="support_prompt_unavailable">Support mode is unavailable in this build.</string>
+    <string name="support_prompt_optional">Optional</string>
+    <string name="support_prompt_not_now">Not now</string>
+    <string name="support_prompt_policy">Privacy policy</string>
+    <string name="support_prompt_terms">By enabling, you agree to the SDK terms and privacy policy.</string>
+    <string name="support_prompt_enable">YES — turn it on</string>
+    <string name="support_prompt_enable_subtitle">Enable support mode</string>
 </resources>

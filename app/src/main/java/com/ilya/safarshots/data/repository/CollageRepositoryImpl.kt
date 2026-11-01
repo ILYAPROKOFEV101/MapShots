@@ -23,17 +23,17 @@ class CollageRepositoryImpl @Inject constructor(
         renderer.render(photos, options)
 
     override suspend fun exportCollage(photos: List<GeoPhoto>, options: CollageOptions): CollageExport {
-        val bitmap = renderer.render(photos, options)
+        val bitmap = renderer.renderForExport(photos, options)
         val id = UUID.randomUUID().toString()
-        val uri = fileWriter.writeToPictures(bitmap, "geomapshots_${System.currentTimeMillis()}.png")
+        val uri = fileWriter.writeToPictures(bitmap, "pinpix_${System.currentTimeMillis()}.png")
         val export = CollageExport(
             id = id,
             template = options.template,
             photoIds = photos.map { it.id },
             outputUri = uri.toString(),
             createdAtMillis = System.currentTimeMillis(),
-            width = options.aspectRatio.width,
-            height = options.aspectRatio.height,
+            width = bitmap.width,
+            height = bitmap.height,
         )
         collageDao.insert(
             CollageEntity(

@@ -1,9 +1,11 @@
 package com.ilya.safarshots.feature.collage
 
 import android.graphics.Bitmap
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ilya.safarshots.R
 import com.ilya.safarshots.core.location.AddressResolver
 import com.ilya.safarshots.domain.model.CollageAspectRatio
 import com.ilya.safarshots.domain.model.CollageBackgroundMode
@@ -13,13 +15,18 @@ import com.ilya.safarshots.domain.model.CollageMapCorner
 import com.ilya.safarshots.domain.model.CollageMapPlacement
 import com.ilya.safarshots.domain.model.CollageOptions
 import com.ilya.safarshots.domain.model.CollageTemplate
+import com.ilya.safarshots.domain.model.CollageTextLayer
+import com.ilya.safarshots.domain.model.CollageTextShape
 import com.ilya.safarshots.domain.model.GeoPhoto
+import com.ilya.safarshots.domain.model.PhotoLocation
 import com.ilya.safarshots.domain.repository.GeoPhotoRepository
 import com.ilya.safarshots.domain.usecase.CreateCollageUseCase
 import com.ilya.safarshots.domain.usecase.ExportCollageUseCase
 import com.ilya.safarshots.domain.usecase.GetGeoPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,6 +35,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class CollageMessage(
+    @StringRes val resId: Int,
+    val intArg: Int? = null,
+)
 
 data class CollageUiState(
     val allPhotos: List<GeoPhoto> = emptyList(),
@@ -40,7 +52,7 @@ data class CollageUiState(
     val isResolvingLocationLabel: Boolean = false,
     val isRendering: Boolean = false,
     val isExporting: Boolean = false,
-    val message: String? = null,
+    val message: CollageMessage? = null,
 ) {
     val selectedPhotos: List<GeoPhoto>
         get() {
@@ -52,26 +64,37 @@ data class CollageUiState(
     /**
      * The photo currently shown as the collage hero. For PHOTO_WITH_MAP this is the photo
      * picked via [CollageOptions.backgroundPhotoId]; for every other template (and as a
-     * fallback) it's the first selected photo. The map snapshot, address resolution and
-     * caption all derive from this one so they stay consistent with what the user sees.
+     * fallback) it's the first selected photo. Caption and address editing derive from it.
      */
     val heroPhoto: GeoPhoto?
         get() {
             val photosById = allPhotos.associateBy { it.id }
             return options.backgroundPhotoId?.let(photosById::get) ?: mainPhoto
         }
-    val requiredMapSnapshotPhoto: GeoPhoto?
-        get() = heroPhoto?.takeIf { photo ->
-            options.showMiniMap &&
-                when (options.template) {
-                    CollageTemplate.PHOTO_WITH_MAP, CollageTemplate.POSTCARD -> true
-                    else -> false
-                } &&
-                photo.location != null
+    val mapTargetPhoto: GeoPhoto?
+        get() {
+            val photosById = allPhotos.associateBy { it.id }
+            return options.mapPhotoId
+                ?.let(photosById::get)
+                ?.takeIf { it.id in selectedIds }
+                ?: heroPhoto?.takeIf { it.location != null }
+                ?: selectedPhotos.firstOrNull { it.location != null }
+                ?: heroPhoto
+                ?: selectedPhotos.firstOrNull()
         }
+    val mapPhoto: GeoPhoto? get() = mapTargetPhoto?.takeIf { it.location != null }
+    val requiredMapSnapshotPhoto: GeoPhoto?
+        get() = mapPhoto?.takeIf { options.showMiniMap }
     val photoNeedingMapSnapshot: GeoPhoto?
         get() = requiredMapSnapshotPhoto?.takeIf { it.mapSnapshotUri == null }
 }
+
+internal fun shouldShowMiniMapByDefault(
+    hasGeotaggedPhoto: Boolean,
+    template: CollageTemplate,
+): Boolean = hasGeotaggedPhoto ||
+    template == CollageTemplate.PHOTO_WITH_MAP ||
+    template == CollageTemplate.POSTCARD
 
 @HiltViewModel
 class CollageViewModel @Inject constructor(
@@ -88,11 +111,16 @@ class CollageViewModel @Inject constructor(
         ?: CollageTemplate.PHOTO_WITH_MAP
     private var renderJob: Job? = null
     private val addressLookupRequestedIds = mutableSetOf<String>()
+    private var mapVisibilityExplicitlySet = false
 
     private val _state = MutableStateFlow(
         CollageUiState(
             selectedIds = initialIds.toSet(),
-            options = CollageOptions(template = initialTemplate),
+            options = CollageOptions(
+                template = initialTemplate,
+                showMiniMap = initialTemplate == CollageTemplate.PHOTO_WITH_MAP ||
+                    initialTemplate == CollageTemplate.POSTCARD,
+            ),
         ),
     )
     val state: StateFlow<CollageUiState> = _state.asStateFlow()
@@ -103,6 +131,7 @@ class CollageViewModel @Inject constructor(
         getGeoPhotos()
             .onEach { photos ->
                 _state.update { it.copy(allPhotos = photos) }
+                syncDefaultMapVisibility()
                 syncLocationLabelEditor()
                 resolveMainAddressIfNeeded()
                 syncPhotoWithMapLayout()
@@ -201,24 +230,35 @@ class CollageViewModel @Inject constructor(
         val current = _state.value
         val wasSelected = photoId in current.selectedIds
         val nextIds: Set<String>
-        var hitLimitMessage: String? = null
+        var hitLimitMessage: CollageMessage? = null
         if (wasSelected) {
             nextIds = current.selectedIds - photoId
         } else if (current.selectedIds.size >= MAX_SELECTION) {
             // Keep the existing selection intact instead of silently dropping one of the
             // previously chosen photos via take(MAX_SELECTION).
             nextIds = current.selectedIds
-            hitLimitMessage = "Можно выбрать не больше $MAX_SELECTION фото"
+            hitLimitMessage = CollageMessage(R.string.collage_editor_select_limit, MAX_SELECTION)
         } else {
             nextIds = current.selectedIds + photoId
         }
-        _state.update { it.copy(selectedIds = nextIds, message = hitLimitMessage ?: it.message) }
+        _state.update {
+            it.copy(
+                selectedIds = nextIds,
+                options = if (wasSelected && it.options.mapPhotoId == photoId) {
+                    it.options.copy(mapPhotoId = null)
+                } else {
+                    it.options
+                },
+                message = hitLimitMessage ?: it.message,
+            )
+        }
         if (!wasSelected && photoId in nextIds) {
             // Pre-warm the on-disk map snapshot for the newly added photo so subsequent
             // preview renders can take the fast path instead of waiting on the network.
             backfillMapSnapshots(listOf(photoId))
         }
         syncPhotoWithMapLayout()
+        syncDefaultMapVisibility()
         maybeRenderForSelection()
     }
 
@@ -230,6 +270,7 @@ class CollageViewModel @Inject constructor(
                 preview = null,
                 options = it.options.copy(
                     backgroundPhotoId = null,
+                    mapPhotoId = null,
                     cards = emptyList(),
                     mapPlacement = null,
                 ),
@@ -239,7 +280,9 @@ class CollageViewModel @Inject constructor(
     }
 
     fun setTemplate(template: CollageTemplate) {
+        if (_state.value.selectedIds.size < template.minimumPhotos) return
         updateOptions { it.copy(template = template) }
+        syncDefaultMapVisibility()
         if (template == CollageTemplate.PHOTO_WITH_MAP) {
             syncPhotoWithMapLayout()
         }
@@ -262,6 +305,26 @@ class CollageViewModel @Inject constructor(
             val cards = current.cards.toMutableList()
             val card = cards.getOrNull(index) ?: return@updateOptions current
             cards[index] = card.copy(widthFrac = widthFrac.coerceIn(MIN_CARD_FRAC, MAX_CARD_FRAC))
+            current.copy(cards = cards)
+        }
+    }
+
+    fun transformCard(
+        index: Int,
+        centerX: Float,
+        centerY: Float,
+        widthFrac: Float,
+        rotationDeg: Float,
+    ) {
+        updateOptions { current ->
+            val cards = current.cards.toMutableList()
+            val card = cards.getOrNull(index) ?: return@updateOptions current
+            cards[index] = card.copy(
+                centerX = centerX.coerceIn(0f, 1f),
+                centerY = centerY.coerceIn(0f, 1f),
+                widthFrac = widthFrac.coerceIn(MIN_CARD_FRAC, MAX_CARD_FRAC),
+                rotationDeg = rotationDeg.normalizedDegrees(),
+            )
             current.copy(cards = cards)
         }
     }
@@ -295,7 +358,7 @@ class CollageViewModel @Inject constructor(
 
     fun moveMap(centerX: Float, centerY: Float) {
         updateOptions { current ->
-            val base = current.mapPlacement ?: defaultMapPlacement()
+            val base = current.mapPlacement ?: defaultMapPlacement(current.mapCorner)
             current.copy(
                 mapPlacement = base.copy(
                     centerX = centerX.coerceIn(0f, 1f),
@@ -307,8 +370,22 @@ class CollageViewModel @Inject constructor(
 
     fun resizeMap(widthFrac: Float) {
         updateOptions { current ->
-            val base = current.mapPlacement ?: defaultMapPlacement()
+            val base = current.mapPlacement ?: defaultMapPlacement(current.mapCorner)
             current.copy(mapPlacement = base.copy(widthFrac = widthFrac.coerceIn(MIN_CARD_FRAC, MAX_CARD_FRAC)))
+        }
+    }
+
+    fun transformMap(centerX: Float, centerY: Float, widthFrac: Float, rotationDeg: Float) {
+        updateOptions { current ->
+            val base = current.mapPlacement ?: defaultMapPlacement(current.mapCorner)
+            current.copy(
+                mapPlacement = base.copy(
+                    centerX = centerX.coerceIn(0f, 1f),
+                    centerY = centerY.coerceIn(0f, 1f),
+                    widthFrac = widthFrac.coerceIn(MIN_CARD_FRAC, MAX_CARD_FRAC),
+                    rotationDeg = rotationDeg.normalizedDegrees(),
+                ),
+            )
         }
     }
 
@@ -333,6 +410,60 @@ class CollageViewModel @Inject constructor(
             val base = current.captionPlacement ?: defaultCaptionPlacement()
             current.copy(captionPlacement = base.copy(widthFrac = widthFrac.coerceIn(MIN_CAPTION_FRAC, MAX_CAPTION_FRAC)))
         }
+    }
+
+    fun transformCaption(originX: Float, originY: Float, widthFrac: Float, rotationDeg: Float) {
+        updateOptions { current ->
+            val base = current.captionPlacement ?: defaultCaptionPlacement()
+            current.copy(
+                captionPlacement = base.copy(
+                    originX = originX.coerceIn(0f, 1f),
+                    originY = originY.coerceIn(0f, 1f),
+                    widthFrac = widthFrac.coerceIn(MIN_CAPTION_FRAC, MAX_CAPTION_FRAC),
+                    rotationDeg = rotationDeg.normalizedDegrees(),
+                ),
+            )
+        }
+    }
+
+    fun setCaptionTextSizeScale(scale: Float) {
+        updateOptions { current ->
+            current.copy(captionStyle = current.captionStyle.copy(textSizeScale = scale.coerceIn(0.65f, 1.8f)))
+        }
+    }
+
+    fun setCaptionTextColor(color: Int) {
+        updateOptions { current -> current.copy(captionStyle = current.captionStyle.copy(textColor = color)) }
+    }
+
+    fun setCaptionBackgroundColor(color: Int) {
+        updateOptions { current -> current.copy(captionStyle = current.captionStyle.copy(backgroundColor = color)) }
+    }
+
+    fun setCaptionBackgroundOpacity(opacity: Float) {
+        updateOptions { current ->
+            current.copy(captionStyle = current.captionStyle.copy(backgroundOpacity = opacity.coerceIn(0f, 1f)))
+        }
+    }
+
+    fun setCaptionBorderColor(color: Int) {
+        updateOptions { current -> current.copy(captionStyle = current.captionStyle.copy(borderColor = color)) }
+    }
+
+    fun setCaptionBorderEnabled(enabled: Boolean) {
+        updateOptions { current ->
+            current.copy(captionStyle = current.captionStyle.copy(borderWidthFrac = if (enabled) 0.004f else 0f))
+        }
+    }
+
+    fun setCaptionCornerRadius(radiusFrac: Float) {
+        updateOptions { current ->
+            current.copy(captionStyle = current.captionStyle.copy(cornerRadiusFrac = radiusFrac.coerceIn(0f, 0.12f)))
+        }
+    }
+
+    fun setCaptionShape(shape: CollageTextShape) {
+        updateOptions { current -> current.copy(captionStyle = current.captionStyle.copy(shape = shape)) }
     }
 
     fun setBackgroundMode(mode: CollageBackgroundMode) {
@@ -386,14 +517,43 @@ class CollageViewModel @Inject constructor(
         }
     }
 
-    private fun defaultMapPlacement(): CollageMapPlacement =
-        CollageMapPlacement(centerX = 0.78f, centerY = 0.78f, widthFrac = 0.4f)
+    private fun defaultMapPlacement(corner: CollageMapCorner): CollageMapPlacement {
+        val centerX = when (corner) {
+            CollageMapCorner.TOP_LEFT, CollageMapCorner.BOTTOM_LEFT -> 0.22f
+            CollageMapCorner.TOP_RIGHT, CollageMapCorner.BOTTOM_RIGHT -> 0.78f
+        }
+        val centerY = when (corner) {
+            CollageMapCorner.TOP_LEFT, CollageMapCorner.TOP_RIGHT -> 0.22f
+            CollageMapCorner.BOTTOM_LEFT, CollageMapCorner.BOTTOM_RIGHT -> 0.78f
+        }
+        return CollageMapPlacement(centerX = centerX, centerY = centerY, widthFrac = 0.4f)
+    }
 
     private fun defaultCaptionPlacement(): CollageCaptionPlacement =
         CollageCaptionPlacement(originX = 0.04f, originY = 0.78f, widthFrac = 0.6f)
 
     fun setAspectRatio(aspectRatio: CollageAspectRatio) {
         updateOptions { it.copy(aspectRatio = aspectRatio) }
+    }
+
+    fun setShowCaption(value: Boolean) {
+        updateOptions { it.copy(showCaption = value) }
+    }
+
+    fun setCustomCaption(value: String) {
+        _state.update { current ->
+            current.copy(
+                options = current.options.copy(
+                    customCaption = value.take(MAX_CAPTION_LENGTH),
+                    // Typing text is an explicit request to put it on the collage. This also
+                    // makes adding text a one-step action after the caption was previously hidden.
+                    showCaption = current.options.showCaption || value.isNotBlank(),
+                ),
+            )
+        }
+        // Text fields can emit an update for every keystroke. Debounce the bitmap renderer so
+        // photo-only layouts stay live without repeatedly decoding every source image.
+        schedulePreviewRender(CAPTION_RENDER_DEBOUNCE_MS)
     }
 
     fun setShowDate(value: Boolean) {
@@ -405,7 +565,170 @@ class CollageViewModel @Inject constructor(
     }
 
     fun setShowMiniMap(value: Boolean) {
-        updateOptions { it.copy(showMiniMap = value) }
+        mapVisibilityExplicitlySet = true
+        val sourceId = state.value.mapPhoto?.id
+        updateOptions {
+            it.copy(
+                showMiniMap = value,
+                mapPhotoId = if (value) it.mapPhotoId ?: sourceId else it.mapPhotoId,
+            )
+        }
+        if (value && sourceId != null) backfillMapSnapshots(listOf(sourceId))
+    }
+
+    fun setMapPhotoId(photoId: String) {
+        val photo = state.value.selectedPhotos.firstOrNull { it.id == photoId } ?: return
+        updateOptions { it.copy(mapPhotoId = photo.id) }
+        if (photo.location != null) backfillMapSnapshots(listOf(photo.id))
+    }
+
+    fun saveManualMapLocation(photoId: String, latitude: Double, longitude: Double, address: String?) {
+        if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) {
+            _state.update { it.copy(message = CollageMessage(R.string.collage_editor_invalid_map_location)) }
+            return
+        }
+        if (photoId !in state.value.selectedIds) return
+        mapVisibilityExplicitlySet = true
+        viewModelScope.launch {
+            val typedAddress = address?.trim()?.takeIf { it.isNotBlank() }
+            val location = PhotoLocation(
+                latitude = latitude,
+                longitude = longitude,
+                addressText = typedAddress,
+                provider = "manual",
+                isApproximate = false,
+            )
+            val resolvedAddress = typedAddress ?: addressResolver.resolve(location)
+            runCatching {
+                geoPhotoRepository.updatePhotoLocation(
+                    photoId,
+                    location.copy(addressText = resolvedAddress),
+                )
+            }.onSuccess {
+                _state.update {
+                    it.copy(
+                        options = it.options.copy(mapPhotoId = photoId, showMiniMap = true),
+                        message = CollageMessage(R.string.collage_editor_map_location_saved),
+                    )
+                }
+                renderPreview()
+            }.onFailure {
+                _state.update { it.copy(message = CollageMessage(R.string.collage_editor_map_location_failed)) }
+            }
+        }
+    }
+
+    fun addTextLayer(text: String): Int {
+        val current = state.value.options.textLayers
+        if (current.size >= MAX_TEXT_LAYERS) return current.lastIndex.coerceAtLeast(0)
+        val index = current.size
+        val column = index % 3
+        val row = index / 3
+        val layer = CollageTextLayer(
+            text = text.take(MAX_TEXT_LENGTH),
+            originX = (0.08f + column * 0.08f).coerceAtMost(0.4f),
+            originY = (0.14f + row * 0.12f).coerceAtMost(0.72f),
+        )
+        updateOptions { it.copy(textLayers = it.textLayers + layer) }
+        return index
+    }
+
+    fun removeTextLayer(index: Int) {
+        updateOptions { current ->
+            if (index !in current.textLayers.indices) return@updateOptions current
+            current.copy(textLayers = current.textLayers.toMutableList().also { it.removeAt(index) })
+        }
+    }
+
+    fun setTextLayerText(index: Int, value: String) {
+        updateTextLayer(index) { it.copy(text = value.take(MAX_TEXT_LENGTH)) }
+    }
+
+    fun moveTextLayer(index: Int, originX: Float, originY: Float) {
+        updateTextLayer(index) {
+            it.copy(originX = originX.coerceIn(0f, 1f), originY = originY.coerceIn(0f, 1f))
+        }
+    }
+
+    fun resizeTextLayer(index: Int, widthFrac: Float) {
+        updateTextLayer(index) { it.copy(widthFrac = widthFrac.coerceIn(MIN_TEXT_WIDTH, MAX_TEXT_WIDTH)) }
+    }
+
+    fun transformTextLayer(
+        index: Int,
+        originX: Float,
+        originY: Float,
+        widthFrac: Float,
+        rotationDeg: Float,
+    ) {
+        updateTextLayer(index) {
+            it.copy(
+                originX = originX.coerceIn(0f, 1f),
+                originY = originY.coerceIn(0f, 1f),
+                widthFrac = widthFrac.coerceIn(MIN_TEXT_WIDTH, MAX_TEXT_WIDTH),
+                rotationDeg = rotationDeg.normalizedDegrees(),
+            )
+        }
+    }
+
+    fun setTextLayerSize(index: Int, textSizeFrac: Float) {
+        updateTextLayer(index) { it.copy(textSizeFrac = textSizeFrac.coerceIn(MIN_TEXT_SIZE, MAX_TEXT_SIZE)) }
+    }
+
+    fun setTextLayerTextColor(index: Int, color: Int) {
+        updateTextLayer(index) { it.copy(textColor = color) }
+    }
+
+    fun setTextLayerBackgroundColor(index: Int, color: Int) {
+        updateTextLayer(index) { it.copy(backgroundColor = color) }
+    }
+
+    fun setTextLayerBackgroundOpacity(index: Int, opacity: Float) {
+        updateTextLayer(index) { it.copy(backgroundOpacity = opacity.coerceIn(0f, 1f)) }
+    }
+
+    fun setTextLayerBorderColor(index: Int, color: Int) {
+        updateTextLayer(index) { it.copy(borderColor = color) }
+    }
+
+    fun setTextLayerBorderEnabled(index: Int, enabled: Boolean) {
+        updateTextLayer(index) { it.copy(borderWidthFrac = if (enabled) 0.004f else 0f) }
+    }
+
+    fun setTextLayerCornerRadius(index: Int, radiusFrac: Float) {
+        updateTextLayer(index) { it.copy(cornerRadiusFrac = radiusFrac.coerceIn(0f, MAX_TEXT_RADIUS)) }
+    }
+
+    fun setTextLayerShape(index: Int, shape: CollageTextShape) {
+        updateTextLayer(index) { it.copy(shape = shape) }
+    }
+
+    private fun updateTextLayer(index: Int, transform: (CollageTextLayer) -> CollageTextLayer) {
+        updateOptions { current ->
+            val layers = current.textLayers.toMutableList()
+            val layer = layers.getOrNull(index) ?: return@updateOptions current
+            layers[index] = transform(layer)
+            current.copy(textLayers = layers)
+        }
+    }
+
+    /**
+     * A geotagged photo should open with its map already visible in every collage template.
+     * Once the user explicitly adds or removes the map, that preference wins for the rest of
+     * this editor session.
+     */
+    private fun syncDefaultMapVisibility() {
+        if (mapVisibilityExplicitlySet) return
+        val current = _state.value
+        val shouldShow = shouldShowMiniMapByDefault(
+            hasGeotaggedPhoto = current.selectedPhotos.any { it.location != null },
+            template = current.options.template,
+        )
+        if (current.options.showMiniMap != shouldShow) {
+            _state.update { state ->
+                state.copy(options = state.options.copy(showMiniMap = shouldShow))
+            }
+        }
     }
 
     fun setDarkStyle(value: Boolean) {
@@ -435,28 +758,47 @@ class CollageViewModel @Inject constructor(
                 .onSuccess {
                     _state.update { it.copy(isLocationLabelDirty = false) }
                 }
-                .onFailure { throwable ->
-                    _state.update { it.copy(message = throwable.message ?: "Не удалось сохранить адрес") }
+                .onFailure {
+                    _state.update { it.copy(message = CollageMessage(R.string.collage_editor_save_address_failed)) }
                 }
         }
     }
 
     fun setMapCorner(corner: CollageMapCorner) {
-        updateOptions { it.copy(mapCorner = corner) }
+        updateOptions { current ->
+            val widthFrac = current.mapPlacement?.widthFrac ?: 0.4f
+            current.copy(
+                mapCorner = corner,
+                mapPlacement = defaultMapPlacement(corner).copy(widthFrac = widthFrac),
+            )
+        }
     }
 
     fun renderPreview() {
-        val current = state.value
-        if (current.selectedIds.isEmpty()) return
+        schedulePreviewRender()
+    }
+
+    private fun schedulePreviewRender(delayMillis: Long = 0L) {
+        if (state.value.selectedIds.isEmpty()) return
         renderJob?.cancel()
         renderJob = viewModelScope.launch {
+            if (delayMillis > 0L) delay(delayMillis)
+            val current = state.value
             _state.update { it.copy(isRendering = true) }
-            runCatching {
-                createCollage(current.selectedIds.toList(), current.options)
-            }.onSuccess { bitmap ->
+            try {
+                val previewOptions = if (current.options.template == CollageTemplate.PHOTO_WITH_MAP) {
+                    current.options.copy(renderTextLayers = false)
+                } else {
+                    // Compose owns the map in these previews so it can be dragged directly.
+                    // Export still receives the untouched options and draws the map into the PNG.
+                    current.options.copy(renderMiniMap = false, renderTextLayers = false)
+                }
+                val bitmap = createCollage(current.selectedIds.toList(), previewOptions)
                 _state.update { it.copy(preview = bitmap, isRendering = false) }
-            }.onFailure { throwable ->
-                _state.update { it.copy(isRendering = false, message = throwable.message ?: "Не удалось создать preview") }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Throwable) {
+                _state.update { it.copy(isRendering = false, message = CollageMessage(R.string.collage_editor_render_failed)) }
             }
         }
     }
@@ -469,9 +811,9 @@ class CollageViewModel @Inject constructor(
             runCatching {
                 exportCollage(current.selectedIds.toList(), current.options)
             }.onSuccess {
-                _state.update { it.copy(isExporting = false, message = "Коллаж сохранен") }
-            }.onFailure { throwable ->
-                _state.update { it.copy(isExporting = false, message = throwable.message ?: "Не удалось экспортировать коллаж") }
+                _state.update { it.copy(isExporting = false, message = CollageMessage(R.string.collage_editor_saved)) }
+            }.onFailure {
+                _state.update { it.copy(isExporting = false, message = CollageMessage(R.string.collage_editor_export_failed)) }
             }
         }
     }
@@ -538,6 +880,8 @@ class CollageViewModel @Inject constructor(
     private fun String?.parsePhotoIds(): List<String> =
         this.orEmpty().split(",").map { it.trim() }.filter { it.isNotBlank() }
 
+    private fun Float.normalizedDegrees(): Float = ((this % 360f) + 540f) % 360f - 180f
+
     private companion object {
         const val MIN_MAP_ZOOM = 11
         const val MAX_MAP_ZOOM = 17
@@ -546,6 +890,15 @@ class CollageViewModel @Inject constructor(
         const val MAX_CARD_FRAC = 0.7f
         const val DEFAULT_CARD_FRAC = 0.28f
         const val MIN_CAPTION_FRAC = 0.3f
-        const val MAX_CAPTION_FRAC = 0.85f
+        const val MAX_CAPTION_FRAC = 0.9f
+        const val MAX_CAPTION_LENGTH = 160
+        const val CAPTION_RENDER_DEBOUNCE_MS = 180L
+        const val MAX_TEXT_LAYERS = 8
+        const val MAX_TEXT_LENGTH = 240
+        const val MIN_TEXT_WIDTH = 0.2f
+        const val MAX_TEXT_WIDTH = 0.9f
+        const val MIN_TEXT_SIZE = 0.018f
+        const val MAX_TEXT_SIZE = 0.1f
+        const val MAX_TEXT_RADIUS = 0.12f
     }
 }

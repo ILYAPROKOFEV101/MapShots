@@ -18,7 +18,7 @@ class GeoPhotoMapperTest {
 
         assertNull(domain.location)
         assertFalse(domain.hasLocation)
-        assertEquals("No location", domain.displaySubtitle)
+        assertNull(domain.locationSubtitle)
     }
 
     @Test

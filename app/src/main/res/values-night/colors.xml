@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dunta_dialog_surface">#FF1D2024</color>
+    <color name="dunta_dialog_primary">#FFA8C7FA</color>
+    <color name="dunta_dialog_primary_pressed">#29A8C7FA</color>
+    <color name="dunta_dialog_primary_container">#FF0842A0</color>
+    <color name="dunta_dialog_on_primary">#FF062E6F</color>
+    <color name="dunta_dialog_on_surface">#FFE2E2E6</color>
+    <color name="dunta_dialog_on_surface_variant">#FFC4C6D0</color>
+    <color name="dunta_dialog_outline_variant">#FF44474E</color>
+</resources>
